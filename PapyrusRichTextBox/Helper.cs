@@ -181,7 +181,7 @@ namespace PapyrusDictionary
 			return ret;
 		}
 
-		public static int FindNextDelimiter( string str, int index )
+		public static int FindNextDelimiter( string str, int index) 
 		{
 			while ( str[index] != '\n' && str[index] != '{' && str[index] != '[' && index < str.Length )
 			{

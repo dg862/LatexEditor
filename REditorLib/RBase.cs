@@ -117,7 +117,8 @@ namespace REditorLib
 				//{
 
 				//}
-				return latexDocumentPreviewCode;
+				//return latexDocumentPreviewCode;
+                return latexDocumentCode;
 			}
 		}
 

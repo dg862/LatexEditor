@@ -61,6 +61,11 @@ namespace LatexEditor
 
 		#region Methods
 
+        public void Search(string what)
+        {
+            manager.Search(what);
+        }
+
         public void ShowOptions()
         {
             //optionForm.OpManager = 
@@ -138,9 +143,19 @@ namespace LatexEditor
             manager.InsertPi();
         }
 
+        public void Insert(string what)
+        {
+            manager.InsertDirectly(what);
+        }
+
         public void NewDocument()
         {
             manager.NewDocument();
+        }
+
+        public void Preview()
+        {
+            manager.Preview();
         }
 
 		#endregion

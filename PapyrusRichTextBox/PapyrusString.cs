@@ -73,6 +73,30 @@ namespace PapyrusDictionary
 
 		#region Methods
 
+        public int Search(string what)
+        {
+            int line = 0;
+
+            while (!this[line].Contains(what) && line < numberOfLines)
+            {
+                line++;
+            }
+
+            return line;
+        }
+
+        public int Search(string what, int start)
+        {
+            int line = start;
+
+            while (!this[line].Contains(what) && line < numberOfLines)
+            {
+                line++;
+            }
+
+            return line;
+        }
+
 		private int CountLines()
 		{
 			if ( string.IsNullOrEmpty( str ) )

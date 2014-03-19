@@ -14,6 +14,7 @@ namespace LatexEditor
 
         public const string compilerName = "pdflatex.exe";
         public const string optionsFile = "options.ini";
+        public const string commandFile = "commands.bin";
 
 		#endregion
 	}

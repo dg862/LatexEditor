@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace PapyrusDictionary
 {
@@ -12,10 +13,30 @@ namespace PapyrusDictionary
 		private PapyrusString			papyrusText;
 		private VScrollBar				scrollBar;
 		private int						currentLine = 0;
+        private int                     selectedLine = 0;
 
 		#endregion
 
 		#region Properties
+
+        public int SelectedLine
+        {
+            get { return selectedLine; }
+            set
+            {
+                if (value > -1)
+                {
+                    selectedLine = value;
+
+                    this.SelectionBackColor = Color.White;
+
+                    SelectLine(selectedLine);
+
+                    //this.BackColor = Color.White;
+                    this.SelectionBackColor = Color.LightBlue;
+                }
+            }
+        }
 
 		public VScrollBar ScrollBar
 		{
@@ -64,6 +85,69 @@ namespace PapyrusDictionary
 		#endregion
 
 		#region Methods
+
+        public void SelectLine(int line)
+        {
+
+            //this.Select(0,0);
+            string txt = this.Text;
+            int start = 0, stop = 0;
+            //int i = 0, j = 0, k = 0;
+
+            for (int i = 0; i < line + 1; i++)
+            {
+                stop = txt.IndexOf('\n', stop + 1);
+                stop = stop == -1 ? txt.Length : stop;
+            }
+
+            start = txt.LastIndexOf('\n', stop - 1);
+
+            start = start == -1 ? 0 : start;
+
+            this.Select(start, stop - start);
+
+
+
+
+            //line++;
+
+            //while (j < txt.Length)
+            //{
+            //    if (i == line - 1)
+            //    {
+            //        k = j;
+            //    }
+
+            //    if (i == line)
+            //    {
+            //        break;
+            //    }
+
+            //    if (txt[j] == '\n')
+            //    {
+            //        i++;
+            //    }
+
+            //    j++;
+            //}
+
+            //this.Select(k, j - k);
+
+
+
+
+            //while (i < selectedLine + 1 && j < txt.Length)
+            //{
+            //    if (txt[j] == '\n')
+            //    {
+            //        k = j;
+            //        i++;
+            //    }
+            //    j++;
+            //}
+
+            //this.Select(k, j - k);            
+        }
 
 		public void Redraw()
 		{

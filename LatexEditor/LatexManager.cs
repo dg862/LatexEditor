@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Formatters.Binary;
 using PapyrusDictionary;
 using REditorLib;
 using LatexHelpers;
@@ -54,11 +55,49 @@ namespace LatexEditor
 
 
             optionsManager.Load();
+            LoadCommands();
 		}
 
 		#endregion
 
 		#region Methods
+
+        public void Preview()
+        {
+            LatexCompilationArgs args = new LatexCompilationArgs();
+            args.Preview = true;
+            //args.LatexCode = latexControl.LatexContainer.LatexDocumentPreviewCode;
+            args.LatexCode = latexControl.LatexContainer.GetCompleteCodeWithChildren();
+            args.ID = Guid.NewGuid().ToString();
+            compilationID = args.ID;
+            args.CompilerPath = "pdflatex.exe";
+            args.CompilerArgs = "";
+
+            compiler.AddToCompilationQueue(args);
+        }
+
+        public void Search(string what)
+        {
+            sourceTextBox.SearchAndScroll(what);
+        }
+
+        public void LoadCommands()
+        {
+            try
+            {
+                if (File.Exists(Constants.commandFile))
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    FileStream fs = File.OpenRead(Constants.commandFile);
+
+                    sourceTextBox.CommandList = (List<string>)bf.Deserialize(fs);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: failed to deserialize command file. Error message: " + ex.Message);
+            }            
+        }
 
         public void InsertPi()
         {
@@ -420,7 +459,15 @@ namespace LatexEditor
 		{
 			if ( compilationID.ToString() == args.ID )
 			{
-				browser.Navigate( Application.StartupPath + "\\" + Constants.defaultOutputFile );
+                if (args.Preview)
+                {
+
+                }
+                
+                else
+                {
+                    browser.Navigate(Application.StartupPath + "\\" + Constants.defaultOutputFile);
+                }
 			}
 		}
 

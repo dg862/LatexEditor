@@ -28,12 +28,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.SuspendLayout();
-			// 
-			// PapyrusRichTextBox
-			// 
-			this.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-			this.ResumeLayout(false);
+            this.SuspendLayout();
+            // 
+            // PapyrusRichTextBox
+            // 
+            this.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.ResumeLayout(false);
 
 		}
 

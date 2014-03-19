@@ -166,21 +166,22 @@ namespace LatexEditor
 
 			if ( args.Preview )
 			{
+                RunProcess(args.CompilerPath, args.LatexCode);
 
-				string testCode = @"\documentclass[border=0pt,convert={density=300,outext=.png}]{standalone}\usepackage{varwidth}\begin{document}\begin{varwidth}{\linewidth}
-\section{Introduction}Here is the text of your introduction.\end{varwidth}\end{document}";
-				string path = "\"E:\\Google Drive\\munka\\diplomaterv\\diplomaterv 1\\test1.tex\"";
+				//string testCode = @"\documentclass[border=0pt,convert={density=300,outext=.png}]{standalone}\usepackage{varwidth}\begin{document}\begin{varwidth}{\linewidth}
+//\section{Introduction}Here is the text of your introduction.\end{varwidth}\end{document}";
+//				string path = "\"E:\\Google Drive\\munka\\diplomaterv\\diplomaterv 1\\test1.tex\"";
 				//RunProcess( args.CompilerPath, args.CompilerArgs + " " + args.LatexCode );
 				//RunProcess( args.PreviewCommandPath, args.PreviewCommandArgs + " " + args.PDFFile + " " + args.PngFile );
 				//RunProcess( args.CompilerPath, args.CompilerArgs + " " + args.LatexCode );
-				RunProcess( args.CompilerPath, args.CompilerArgs + " " + path );
+		//		RunProcess( args.CompilerPath, args.CompilerArgs + " " + path );
 				//RunProcess( args.CompilerPath, args.CompilerArgs + " " + @"E:\test1.tex");		//works
 				//RunProcess( args.CompilerPath, args.CompilerArgs + " " + testCode);
 			}
 
 			else
 			{
-				RunProcess( args.CompilerPath, args.CompilerArgs + " " + args.TexFile );
+			//	RunProcess( args.CompilerPath, args.CompilerArgs + " " + args.TexFile );
 			}
 		}
 

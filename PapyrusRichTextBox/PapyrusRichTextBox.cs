@@ -34,11 +34,43 @@ namespace PapyrusDictionary
 		private string					temporaryModifiedContent;
 		private bool					isMouseDragging = false;
 		private bool					leftMouseClick = false;
+
+        private List<string>            fullCommandList;
+        private List<string>            shortCommandList;
+        private string                  command;
+        private string                  currentSearch;
+        private int                     currentSearchIndex;
+        private int                     searchResults = 0;
+        //private string                  commandID;
 		//private TooltipBox		toolTip;
 
 		#endregion
 
 		#region Properties
+
+        //public string CommandID
+        //{
+        //    get { return commandID; }
+        //    set
+        //    {
+        //        if (!string.IsNullOrEmpty(value))
+        //        {
+        //            commandID = value;
+        //        }
+        //    }
+        //}
+
+        public List<string> CommandList
+        {
+            get { return fullCommandList; }
+            set
+            {
+                if (value != null)
+                {
+                    fullCommandList = value;
+                }
+            }
+        }
 
 		public int CaretPosition
 		{
@@ -274,6 +306,7 @@ namespace PapyrusDictionary
 			this.MouseDown += new MouseEventHandler( PapyrusRichTextBox_MouseDown );
 			this.MouseWheel += new MouseEventHandler( PapyrusRichTextBox_MouseWheel );
 			this.KeyDown += new KeyEventHandler( PapyrusRichTextBox_KeyDown );
+            this.KeyPress += PapyrusRichTextBox_KeyPress;
 			this.MouseMove += new MouseEventHandler( PapyrusRichTextBox_MouseMove );
 			this.KeyUp += new KeyEventHandler( PapyrusRichTextBox_KeyUp );
 
@@ -320,6 +353,36 @@ namespace PapyrusDictionary
 		#endregion
 
 		#region Methods
+
+        public void SearchAndScroll(string what)
+        {
+            searchResults = 0;
+            currentSearch = what;
+            currentSearchIndex = 0;
+            int where = papyrusText.Search(what);
+
+            PapyrusVScroll(where - currentLine);
+
+            int index = 0;
+
+            this.SelectionBackColor = Color.White;
+            SyntaxHighlight();
+
+            while (index != -1)
+            {
+                index = this.Text.IndexOf(what, index + 1);
+
+                if (index != -1)
+                {
+                    this.Select(index, what.Length);
+                    this.SelectionBackColor = Color.Teal;
+
+                    searchResults++;
+                }
+            }
+
+            
+        }
 
 		public void Redraw()
 		{
@@ -654,15 +717,19 @@ namespace PapyrusDictionary
 
 			try
 			{
+                //toolTip.Text = "testsetsetest";
+                shortCommandList = fullCommandList;
+                UpdateTooltip();
+                toolTip.SelectedLine = 0;
 				//toolTip.Text += "testestsetstsetsetse";
-				toolTip.Rtf = currentTranslation;
+				//toolTip.Rtf = currentTranslation;
 				//toolTip.Text += "testestsetstsetsetse";
 				//toolTip.Select( 5, 10 );
 				//toolTip.Rtf += toolTip.SelectedRtf;
 			}
 			catch ( Exception )
 			{
-				toolTip.Text = currentTranslation;
+				//toolTip.Text = currentTranslation;
 			}
 
 			toolTip.Size = CalculateTooltipSize();
@@ -680,6 +747,21 @@ namespace PapyrusDictionary
 			toolTipVisible = false;
 			//toolTip.Dispose();
 		}
+
+        private void UpdateTooltip()
+        {
+            shortCommandList = shortCommandList.FindAll(x => x.Contains(command));
+
+            toolTip.Text = string.Empty;
+
+            foreach (var item in shortCommandList)
+            {
+                toolTip.Text += item + '\n';
+            }
+
+            toolTip.SelectedLine = toolTip.SelectedLine;
+            
+        }
 
 		public bool PointInsideRectangle( Point P, Rectangle R )
 		{
@@ -902,6 +984,11 @@ namespace PapyrusDictionary
 			int previousLineLen = firstLineLen;
 			int dir = up ? -1 : 1;
 
+            if (firstLineLen == 0 && up)
+            {
+                return 0;
+            }
+
 			while ((up ? firstLineLen > -1 : firstLineLen < text.Length) && text[firstLineLen] != '\n')
 			{
 				firstLineLen += dir;
@@ -992,6 +1079,22 @@ namespace PapyrusDictionary
 				return caretPosition;
 			}
 		}
+
+        public void InsertTooltipCommand()
+        {
+            string toInsert = toolTip.SelectedText;
+            int i = 0;
+            while (toInsert[i] != '\\' && i < toInsert.Length)
+            {
+                i++;
+            }
+            toInsert = toInsert.Substring(i);
+
+            this.Text = this.Text.Insert(CaretPosition, toInsert.Substring(command.Length, toInsert.Length - command.Length));
+            caretPosition += toInsert.Length - command.Length;
+
+            HideTooltip();          
+        }
 
 		#endregion
 
@@ -1208,42 +1311,79 @@ namespace PapyrusDictionary
 
 		void PapyrusRichTextBox_KeyUp( object sender, KeyEventArgs e )
 		{
+
+            if (e.KeyCode == Keys.Space)
+            {
+                if (toolTipVisible)
+                {
+                    InsertTooltipCommand();
+                }
+            }
+            
 			if ( e.KeyCode == Keys.Up )
 			{
-				MoveCaret( true );
-			//	PapyrusVScroll( -1 );
-				e.SuppressKeyPress = true;
+                if (toolTipVisible)
+                {
+                    toolTip.SelectedLine--;
+                }
+                else
+                {
+                    MoveCaret(true);
+                    //	PapyrusVScroll( -1 );
+                    e.SuppressKeyPress = true;
 
-				//HighlightBracket( caretPosition );
-				//System.Threading.Thread.Sleep(50);
+                    //HighlightBracket( caretPosition );
+                    //System.Threading.Thread.Sleep(50);
+                }
 			}
 
 			else if ( e.KeyCode == Keys.Down )
 			{
-				MoveCaret( false );
-//				PapyrusVScroll( 1 );
-				e.SuppressKeyPress = true;
-				//HighlightBracket( caretPosition );
-				//System.Threading.Thread.Sleep( 50 );
+                if (toolTipVisible)
+                {
+                    toolTip.SelectedLine++;
+                }
+                else
+                {
+                    MoveCaret(false);
+                    //				PapyrusVScroll( 1 );
+                    e.SuppressKeyPress = true;
+                    //HighlightBracket( caretPosition );
+                    //System.Threading.Thread.Sleep( 50 );   
+                }
 			}
 
 			else if ( e.KeyCode == Keys.Left )
 			{
 				//HighlightBracket( caretPosition );
 
-				if ( caretPosition - 1 > -1 )
+                //if (toolTipVisible)
+                //{
+                //    string toInsert = toolTip.SelectedText;
+
+                //    this.Text.Insert(caretPosition, toInsert.Substring(command.Length, toInsert.Length - command.Length));
+                //    caretPosition += toInsert.Length - command.Length;
+
+                //    HideTooltip();
+                //}
+
+                //else if ( caretPosition - 1 > -1 )
+                if ( caretPosition - 1 > -1 )
 				{
-					if ( base.Text[caretPosition - 1] == '\n' )
-					{
-						caretPosition--;
-						if ( caretPosition - 1 > -1 )
-						{
-							if ( base.Text[caretPosition - 1] == '\r' )
-							{
-								caretPosition--;
-							}							
-						}
-					}
+                    if (base.Text.Length > 0)
+                    {
+                        if (base.Text[caretPosition - 1] == '\n')
+                        {
+                            caretPosition--;
+                            if (caretPosition - 1 > -1)
+                            {
+                                if (base.Text[caretPosition - 1] == '\r')
+                                {
+                                    caretPosition--;
+                                }
+                            }
+                        }
+                    }
 
 					caretPosition--;
 				}
@@ -1252,29 +1392,50 @@ namespace PapyrusDictionary
 			else if ( e.KeyCode == Keys.Right )
 			{
 				//HighlightBracket( caretPosition );
-				if ( caretPosition + 1 < base.Text.Length )
-				{
-					caretPosition++;
-				}
+                if (toolTipVisible)
+                {
+                    InsertTooltipCommand();
 
-				if ( caretPosition + 1 < base.Text.Length )
-				{
-					if ( base.Text[caretPosition + 1] == '\r' )
-					{
-						caretPosition++;
-						if ( caretPosition + 1 < base.Text.Length )
-						{
-							if ( base.Text[caretPosition + 1] == '\n' )
-							{
-								caretPosition++;
-							}
-						}
-					}
+                    //string toInsert = toolTip.SelectedText;
+                    //int i = 0;
+                    //while (toInsert[i] != '\\' && i < toInsert.Length)
+                    //{
+                    //    i++;
+                    //}
+                    //toInsert = toInsert.Substring(i);
 
-					caretPosition--;
-				}
+                    //this.Text = this.Text.Insert(CaretPosition, toInsert.Substring(command.Length, toInsert.Length - command.Length));
+                    //caretPosition += toInsert.Length - command.Length;
 
-				caretPosition++;
+                    //HideTooltip();
+                }
+
+                else
+                {
+                    if (caretPosition + 1 < base.Text.Length)
+                    {
+                        caretPosition++;
+                    }
+
+                    if (caretPosition + 1 < base.Text.Length)
+                    {
+                        if (base.Text[caretPosition + 1] == '\r')
+                        {
+                            caretPosition++;
+                            if (caretPosition + 1 < base.Text.Length)
+                            {
+                                if (base.Text[caretPosition + 1] == '\n')
+                                {
+                                    caretPosition++;
+                                }
+                            }
+                        }
+
+                        caretPosition--;
+                    }
+
+                    caretPosition++;
+                }
 			}
 
 
@@ -1297,6 +1458,20 @@ namespace PapyrusDictionary
 				//System.Threading.Thread.Sleep( 50 );
 			}
 
+            //else if (e.KeyCode == Keys.OemBackslash)
+            //{
+            //    tooltipLocation = this.GetPositionFromCharIndex(this.CaretPosition);
+            //    e.SuppressKeyPress = true;
+            //    //System.Threading.Thread.Sleep( 50 );
+            //}
+
+            //else if (e.KeyCode == Keys.OemQuestion)
+            //{
+            //    tooltipLocation = this.GetPositionFromCharIndex(this.CaretPosition);
+            //    e.SuppressKeyPress = true;
+            //    //System.Threading.Thread.Sleep( 50 );
+            //}
+
 			else
 			{
 				temporaryModifiedContent = base.Text;
@@ -1304,17 +1479,37 @@ namespace PapyrusDictionary
 				//caretPosition =
 				needsRecompilation = true;
 			}			
+
+
 		}
+
+        void PapyrusRichTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\\')
+            {
+                command = "\\";
+                tooltipLocation = this.GetPositionFromCharIndex(this.CaretPosition);
+                DisplayTooltip(tooltipLocation);
+                caretPosition++;
+            }
+
+            else if (((int)e.KeyChar > 64 && (int)e.KeyChar < 91) || ((int)e.KeyChar > 96 && (int)e.KeyChar < 123))
+            {
+                caretPosition++;
+                command += e.KeyChar;
+                UpdateTooltip();
+            }
+        }
 
 		void PapyrusRichTextBox_MouseMove( object sender, MouseEventArgs e )
 		{
-			if ( toolTipVisible )
-			{
-				if ( CalcToolTipDistance( e.Location ) > maxToolTipDistance )
-				{
-					HideTooltip();
-				}
-			}
+            //if ( toolTipVisible )
+            //{
+            //    if ( CalcToolTipDistance( e.Location ) > maxToolTipDistance )
+            //    {
+            //        HideTooltip();
+            //    }
+            //}
 
 			if ( leftMouseClick )
 			{
