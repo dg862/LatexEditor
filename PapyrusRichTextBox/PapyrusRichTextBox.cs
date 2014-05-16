@@ -41,6 +41,8 @@ namespace PapyrusDictionary
         private string                  currentSearch;
         private int                     currentSearchIndex;
         private int                     searchResults = 0;
+		private bool					tabPressed = false;
+		private Dictionary<string, string> snippets;
         //private string                  commandID;
 		//private TooltipBox		toolTip;
 
@@ -276,6 +278,17 @@ namespace PapyrusDictionary
 					//toolTip.ScrollBar = new VScrollBar();
 					//toolTip.Visible = false;
 					//this.Controls.Add( toolTip );
+				}
+			}
+		}
+
+		public Dictionary<string, string> Snippets
+		{
+			set
+			{
+				if (value != null)
+				{
+					snippets = value;
 				}
 			}
 		}
@@ -1083,18 +1096,32 @@ namespace PapyrusDictionary
         public void InsertTooltipCommand()
         {
             string toInsert = toolTip.SelectedText;
-            int i = 0;
-            while (toInsert[i] != '\\' && i < toInsert.Length)
-            {
-                i++;
-            }
-            toInsert = toInsert.Substring(i);
 
-            this.Text = this.Text.Insert(CaretPosition, toInsert.Substring(command.Length, toInsert.Length - command.Length));
-            caretPosition += toInsert.Length - command.Length;
+			InsertCommand(toInsert);
 
             HideTooltip();          
         }
+
+		public void InsertCommand(string what)
+		{
+			string toInsert = what;
+			int i = 0;
+			while (toInsert[i] != '\\' && i < toInsert.Length)
+			{
+				i++;
+			}
+			toInsert = toInsert.Substring(i);
+
+			this.Text = this.Text.Insert(CaretPosition, toInsert.Substring(command.Length, toInsert.Length - command.Length));
+			caretPosition += toInsert.Length - command.Length;
+		}
+
+		public string ReverseString(string s)
+		{
+			char[] arr = s.ToCharArray();
+			Array.Reverse(arr);
+			return new string(arr);
+		}
 
 		#endregion
 
@@ -1288,6 +1315,26 @@ namespace PapyrusDictionary
 				//System.Threading.Thread.Sleep( 50 );
 			}
 
+			else if (e.KeyCode == Keys.Space && (ModifierKeys & Keys.Control) == Keys.Control)
+			{
+				int i = 1;
+				string snip = string.Empty;
+				while (caretPosition - i > -1 && (this.Text[caretPosition - i] != '\n' && this.Text[caretPosition - i] != ' '))
+				{
+					snip += this.Text[caretPosition - i];
+					i++;
+				}
+
+				snip = ReverseString(snip);
+
+				this.Text = this.Text.Insert(caretPosition, snippets[snip]);
+
+				this.Text = this.Text.Remove(caretPosition - i + 1, snip.Length);
+
+				recompilationEvent(this.Text);
+//				this.Text = this.Text.Insert(caretPosition, snippets[snip]);
+			}
+
 			//else if ( e.KeyCode == Keys.PageUp )
 			//{
 			//    PapyrusVScroll( -papyrusText.LinesPerPage );
@@ -1312,8 +1359,26 @@ namespace PapyrusDictionary
 		void PapyrusRichTextBox_KeyUp( object sender, KeyEventArgs e )
 		{
 
+			//if (e.KeyCode == Keys.RControlKey)
+			//{
+			//	if (tabPressed)
+			//	{
+			//		tabPressed = false;
+			//		string snippet = SelectPreviousWord(caretPosition);
+
+			//		InsertCommand(snippets[snippet]);
+			//	}
+
+			//	else
+			//	{
+			//		tabPressed = true;
+			//	}
+			//}
+
+
             if (e.KeyCode == Keys.Space)
             {
+				tabPressed = false;
                 if (toolTipVisible)
                 {
                     InsertTooltipCommand();
@@ -1322,6 +1387,7 @@ namespace PapyrusDictionary
             
 			if ( e.KeyCode == Keys.Up )
 			{
+				tabPressed = false;
                 if (toolTipVisible)
                 {
                     toolTip.SelectedLine--;
@@ -1339,6 +1405,7 @@ namespace PapyrusDictionary
 
 			else if ( e.KeyCode == Keys.Down )
 			{
+				tabPressed = false;
                 if (toolTipVisible)
                 {
                     toolTip.SelectedLine++;
@@ -1368,6 +1435,8 @@ namespace PapyrusDictionary
                 //}
 
                 //else if ( caretPosition - 1 > -1 )
+				tabPressed = false;
+
                 if ( caretPosition - 1 > -1 )
 				{
                     if (base.Text.Length > 0)
@@ -1392,6 +1461,7 @@ namespace PapyrusDictionary
 			else if ( e.KeyCode == Keys.Right )
 			{
 				//HighlightBracket( caretPosition );
+				tabPressed = false;
                 if (toolTipVisible)
                 {
                     InsertTooltipCommand();
@@ -1443,6 +1513,7 @@ namespace PapyrusDictionary
 			//else if ( e.KeyCode == Keys.PageUp )
 			if ( e.KeyCode == Keys.PageUp )
 			{
+				tabPressed = false;
 				PapyrusVScroll( -papyrusText.LinesPerPage );
 				e.SuppressKeyPress = true;
 
@@ -1453,6 +1524,7 @@ namespace PapyrusDictionary
 
 			else if ( e.KeyCode == Keys.PageDown )
 			{
+				tabPressed = false;
 				PapyrusVScroll( papyrusText.LinesPerPage );
 				e.SuppressKeyPress = true;
 				//System.Threading.Thread.Sleep( 50 );
@@ -1474,6 +1546,7 @@ namespace PapyrusDictionary
 
 			else
 			{
+				tabPressed = false;
 				temporaryModifiedContent = base.Text;
 				//this.sele
 				//caretPosition =
@@ -1497,7 +1570,10 @@ namespace PapyrusDictionary
             {
                 caretPosition++;
                 command += e.KeyChar;
-                UpdateTooltip();
+				if (toolTip.Visible)
+				{
+					UpdateTooltip();
+				}
             }
         }
 

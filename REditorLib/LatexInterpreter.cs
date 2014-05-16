@@ -113,6 +113,8 @@ namespace REditorLib
 
 									RecursivelyCreateObjects( newTags, toAdd );
 
+									toAdd.IsPreambleTag = true;
+
 									parent.AddToContainer( toAdd );
 
 									i = endIndex[0] + 1;
@@ -123,12 +125,14 @@ namespace REditorLib
 								{
 									RBase toAdd = new RBase( '\\' + tags[i], tags[i].Substring( 0, tags[i].IndexOf( '{' ) ) );
 
+									toAdd.IsPreambleTag = true;
+
 									parent.AddToContainer( toAdd );
 									i++;
 								}
 							}
 
-							break;
+							//break;
 						}
 					}
 

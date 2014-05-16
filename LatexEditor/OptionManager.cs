@@ -24,6 +24,7 @@ namespace LatexEditor
         private string iMagickPath;
         private string distribution;
         public event RequestRead readRequest;
+		private Dictionary<string, string> snippetDict;
 
         #endregion
 
@@ -46,6 +47,11 @@ namespace LatexEditor
             get { return this.id; }
         }
 
+		public Dictionary<string, string> SnippetDict
+		{
+			get { return snippetDict; }
+		}
+
         #endregion
 
         #region Constructors
@@ -53,6 +59,7 @@ namespace LatexEditor
         public OptionManager(OptionsForm form)
         {
             optionForm = form;
+			snippetDict = new Dictionary<string, string>();
         }
 
         #endregion
@@ -156,6 +163,15 @@ namespace LatexEditor
 
                 wr.WriteEndElement();
 
+				wr.WriteStartElement("Snippets");
+
+				foreach (var item in snippetDict)
+				{
+					wr.WriteElementString(item.Key, item.Value);
+				}
+
+				wr.WriteEndElement();
+
 				wr.WriteEndElement();
 			}			
         }
@@ -235,6 +251,18 @@ namespace LatexEditor
                 REditorLib.Constants.defaultPreviewCode = innerNode.InnerText;
 
                 REditorLib.Constants.latexDistribution = distribution;
+
+				elem = (XmlElement)docRoot.SelectSingleNode("Snippets");
+				if (elem != null)
+				{
+					innerNode = elem.SelectSingleNode("*");
+
+					while (innerNode != null)
+					{
+						snippetDict.Add(innerNode.Name, innerNode.InnerText);
+						innerNode = innerNode.NextSibling;
+					}
+				}
             }         
         }
 

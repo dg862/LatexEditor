@@ -8,7 +8,7 @@ namespace LatexHelpers
 {
 	public class FileIODescriptor
 	{
-		#region Variables
+		#region Fields
 
 		private string			fileName;
 		private bool			write;

@@ -191,6 +191,39 @@ namespace REditorLib
             theContainer = new RBase("\\documentclass{article}\n\n\\end{document}", "documentclass");
         }
 
+		public void DrawPreview()
+		{
+			Graphics g = this.previewBox.CreateGraphics();
+			float dx = g.DpiX;
+			float dy = g.DpiY;
+			Pen p = new Pen(Color.Black, 0.4f);
+			RectangleF rect = new RectangleF(0, 0, 8.27f * dx, 11.69f * dy);
+			int sumHeight = 0;
+
+			g.DrawRectangle(p, rect.X, rect.Y, rect.Width, rect.Height);
+
+			foreach (var item in theContainer.Document.Children)
+			{
+				if (!item.IsPreambleTag && item.Visual != null)
+				{
+					Size s = new Size((int)(item.Visual.Size.Width * dx / (float)Constants.density), (int)(item.Visual.Size.Height * dy / (float)Constants.density));
+
+					item.ResizedVisual = ResizeImage(item.Visual, s);
+
+					g.DrawImage(item.ResizedVisual, new Point(0, sumHeight));
+					sumHeight += item.ResizedVisual.Height + 20;
+					//previewBox.Image = item.ResizedVisual;
+				}
+			}
+
+			g.Dispose();
+		}
+
+		public Image ResizeImage(Image img, Size newSize)
+		{
+			return (Image)(new Bitmap(img, newSize));
+		}
+
 		#endregion
 
 		#region Event handlers
@@ -221,12 +254,12 @@ namespace REditorLib
 
 		void latexCompiler_compilationDone( LatexCompilationArgs args )
 		{
-			if ( args.Preview )
-			{
-				FileIODescriptor fiod = new FileIODescriptor( args.ID, Constants.scratchPadPath + args.ID + ".png", true );
+			//if ( args.Preview )
+			//{
+			//	FileIODescriptor fiod = new FileIODescriptor( args.ID, Constants.scratchPadPath + args.ID + ".png", true );
 
-				diskHandler.AddFileToAccessQueue(fiod);
-			}
+			//	diskHandler.AddFileToAccessQueue(fiod);
+			//}
 		}
 
 		void diskHandler_diskOperationDone( FileIODescriptor fiod )
@@ -266,5 +299,10 @@ namespace REditorLib
 		}
 
 		#endregion
+
+		private void previewBox_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

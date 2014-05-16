@@ -71,6 +71,7 @@ namespace LatexEditor
             //optionForm.OpManager = 
 
             optionForm.CheckOptions();
+			optionForm.OpManager = manager.OptionManager;
 
             if (optionForm.ShowDialog() == DialogResult.OK)
             {

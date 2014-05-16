@@ -6,22 +6,24 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using PapyrusDictionary;
+using System.Collections;
 
 namespace REditorLib
 {
-	public class RBase : IContainerAccess
+	public class RBase : IContainerAccess, IEnumerable
 	{
 		#region Fields
 
 		protected Guid								id;
 		protected string							latexDocumentPreviewCode;
 		protected string							latexDocumentCode;
-		protected RBase								preamble;
+		//protected RBase								preamble;
 		protected string							tag;
 		protected RContainer						container;
 		protected RControl							parentControl;
 		protected RBase								parentEditor;
 		protected Image								visual;
+		protected Image								resizedVisual;
 		private PointF								positionInParent;
 		protected bool								isChanged;
 		private Color								defaultBackgroundColor = Color.FromArgb( 0, 43, 54 );
@@ -29,10 +31,24 @@ namespace REditorLib
 		private Color								backColor;
 		private Color								foreColor;
 		private Size								clientSize;
+		private bool								previewOutOfDate = true;
+		private bool								isPreambleTag = false;
 
 		#endregion
 
 		#region Properties
+
+		public bool IsPreambleTag
+		{
+			get { return isPreambleTag; }
+			set { isPreambleTag = value; }
+		}
+
+		public bool PreviewOutOfDate
+		{
+			get { return previewOutOfDate; }
+			set { previewOutOfDate = value; }
+		}
 
 		public string Tag
 		{
@@ -44,10 +60,21 @@ namespace REditorLib
 			get { return container.Nodes; }
 		}
 
+		public RBase Document
+		{
+			get { return container.Document; }
+		}
+
 		public Image Visual
 		{
 			get { return visual; }
 			set { visual = value; }
+		}
+
+		public Image ResizedVisual
+		{
+			get { return visual; }
+			set { visual = value; }			
 		}
 
 		public PointF PositionInParent
@@ -113,12 +140,11 @@ namespace REditorLib
 		{
 			get
 			{
-				//if ( true )
-				//{
-
-				//}
-				//return latexDocumentPreviewCode;
-                return latexDocumentCode;
+				string previewCode = Constants.defaultPreviewCode;
+				int index = previewCode.IndexOf('%');
+				previewCode.Remove(index, 1);
+				previewCode = previewCode.Insert(index, this.GetCompleteCodeWithChildren());
+                return previewCode;
 			}
 		}
 
@@ -129,8 +155,21 @@ namespace REditorLib
 
 		public RBase Preamble
 		{
-			get { return preamble; }
-			set { preamble = value;	}
+			get 
+			{
+				RBase ret = new RBase();
+				foreach (var item in container.Nodes)
+				{
+					if (item.IsPreambleTag)
+					{
+						ret.AddToContainer(item);
+					}
+				}
+
+				return ret;
+			}
+			//get { return preamble; }
+			//set { preamble = value;	}
 		}
 
 		#endregion
@@ -191,6 +230,47 @@ namespace REditorLib
 
 		#region Methods
 
+		public string GetPreviewCodeWithPreamble(RBase pre)
+		{
+			//string previewCode = Constants.defaultPreviewCode;
+			string previewCode = Constants.defaultPreviewCode;
+			int index = previewCode.IndexOf('%');
+			previewCode.Remove(index, 1);
+			previewCode = previewCode.Insert(index, pre.GetCompleteCodeWithChildren());
+			previewCode = previewCode.Insert(index + pre.GetCompleteCodeWithChildren().Length, this.GetCompleteCodeWithChildren());
+			return previewCode;
+		}
+
+		public int ContainsID(string what)
+		{
+			int i = 0;
+			foreach (var item in container.Nodes)
+			{
+				if (item.ID == what)
+				{
+					return i;
+				}
+
+				i++;
+			}
+
+			return -1;
+		}
+
+		public void SetImage(int index, Image img)
+		{
+			LinkedList<RBase>.Enumerator en = container.Nodes.GetEnumerator();
+			en.MoveNext();
+
+			for (int i = 0; i < index; i++)
+			{
+				en.MoveNext();
+			}
+
+			en.Current.Visual = img;			
+		}
+
+
 		public string GetCompleteCodeWithChildren()
 		{
 			string ret = latexDocumentCode;
@@ -242,10 +322,10 @@ namespace REditorLib
 			return ret;
 		}
 
-		public void AddToPreamble(RBase p)
-		{
-			this.preamble.container.PushBack( p );
-		}
+		//public void AddToPreamble(RBase p)
+		//{
+		//	this.preamble.container.PushBack( p );
+		//}
 
 		public void AddToContainer(RBase b)
 		{
@@ -333,6 +413,11 @@ namespace REditorLib
 		public int Count
 		{
 			get { return container.Nodes.Count; }
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

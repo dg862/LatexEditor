@@ -155,7 +155,7 @@ namespace LatexEditor
 			Monitor.Enter( toCompile );
 			try
 			{
-				args = ( (LatexCompilationArgs) toCompile[0] );
+				args = ((LatexCompilationArgs)toCompile[0]);
 				toCompile.RemoveAt( 0 );
 				e.Result = args;													//set the result to the io descriptor so that the manager can know the ID
 			}
@@ -166,7 +166,9 @@ namespace LatexEditor
 
 			if ( args.Preview )
 			{
-                RunProcess(args.CompilerPath, args.LatexCode);
+                //RunProcess(args.CompilerPath, args.LatexCode);
+                RunProcess(args.CompilerPath, args.CompilerArgs);
+				RunProcess(Constants.imageMagickPath, "-density 300 -quality 90 " + args.ID + ".pdf" + " " + args.ID + ".png");
 
 				//string testCode = @"\documentclass[border=0pt,convert={density=300,outext=.png}]{standalone}\usepackage{varwidth}\begin{document}\begin{varwidth}{\linewidth}
 //\section{Introduction}Here is the text of your introduction.\end{varwidth}\end{document}";

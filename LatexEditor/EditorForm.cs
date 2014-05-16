@@ -74,336 +74,344 @@ namespace LatexEditor
 			//AppManager.Instance.Save();
 		}
 
-		#endregion		
-
-		private void compileSelectedBtn_Click( object sender, EventArgs e )
+		private void compileSelectedBtn_Click(object sender, EventArgs e)
 		{
 			App.Instance.CompileSelection();
 		}
 
-		private void boldBtn_Click( object sender, EventArgs e )
+		private void boldBtn_Click(object sender, EventArgs e)
 		{
 			App.Instance.Bold();
 		}
 
-		private void underlinedBtn_Click( object sender, EventArgs e )
+		private void underlinedBtn_Click(object sender, EventArgs e)
 		{
 			App.Instance.Underlined();
 		}
 
-		private void italicsBtn_Click( object sender, EventArgs e )
+		private void italicsBtn_Click(object sender, EventArgs e)
 		{
 			App.Instance.Italics();
 		}
 
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.ShowOptions();
-        }
+		private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.ShowOptions();
+		}
 
-        private void piToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.InsertPi();
-        }
+		private void piToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.InsertPi();
+		}
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Open();
-        }
+		private void openToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Open();
+		}
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.NewDocument();
-        }
+		private void newToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.NewDocument();
+		}
 
-        private void newToolStripButton_Click(object sender, EventArgs e)
-        {
-            App.Instance.NewDocument();
-        }
+		private void newToolStripButton_Click(object sender, EventArgs e)
+		{
+			App.Instance.NewDocument();
+		}
 
-        private void searchBtn_Click(object sender, EventArgs e)
-        {
-            App.Instance.Search(searchCombo.Text);
-        }
+		private void searchBtn_Click(object sender, EventArgs e)
+		{
+			App.Instance.Search(searchCombo.Text);
+		}
 
-        private void searchBackBtn_Click(object sender, EventArgs e)
-        {
-            
-        }
+		private void searchBackBtn_Click(object sender, EventArgs e)
+		{
 
-        private void alphaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\alpha");
-        }
+		}
 
-        private void betaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\beta");
-        }
+		private void alphaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\alpha");
+		}
 
-        private void gammaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\gamma");
-        }
+		private void betaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\beta");
+		}
 
-        private void deltaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\delta");
-        }
+		private void gammaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\gamma");
+		}
 
-        private void epsilonToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\epsilon");
-        }
+		private void deltaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\delta");
+		}
 
-        private void zetaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\zeta");
-        }
+		private void epsilonToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\epsilon");
+		}
 
-        private void etaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\eta");
-        }
+		private void zetaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\zeta");
+		}
 
-        private void thetaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\theta");
-        }
+		private void etaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\eta");
+		}
 
-        private void iotaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\iota");
-        }
+		private void thetaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\theta");
+		}
 
-        private void kappaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\kappa");
-        }
+		private void iotaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\iota");
+		}
 
-        private void lamdaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\lambda");
-        }
+		private void kappaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\kappa");
+		}
 
-        private void muToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\mu");
-        }
+		private void lamdaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\lambda");
+		}
 
-        private void nuToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\nu");
-        }
+		private void muToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\mu");
+		}
 
-        private void xiToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\xi");
-        }
+		private void nuToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\nu");
+		}
 
-        private void rhoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\rho");
-        }
+		private void xiToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\xi");
+		}
 
-        private void sigmaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\sigma");
-        }
+		private void rhoToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\rho");
+		}
 
-        private void tauToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\tau");
-        }
+		private void sigmaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\sigma");
+		}
 
-        private void upsilonToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\upsilon");
-        }
+		private void tauToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\tau");
+		}
 
-        private void phiToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\phi");
-        }
+		private void upsilonToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\upsilon");
+		}
 
-        private void chiToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\chi");
-        }
+		private void phiToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\phi");
+		}
 
-        private void psiToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\psi");
-        }
+		private void chiToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\chi");
+		}
 
-        private void omegaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\omega");
-        }
+		private void psiToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\psi");
+		}
 
-        private void arccosToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\arccos");
-        }
+		private void omegaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\omega");
+		}
 
-        private void arcsinToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\arcsin");
-        }
+		private void arccosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\arccos");
+		}
 
-        private void arctanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\arctan");
-        }
+		private void arcsinToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\arcsin");
+		}
 
-        private void argToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\arg");
-        }
+		private void arctanToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\arctan");
+		}
 
-        private void cosToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\cos");
-        }
+		private void argToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\arg");
+		}
 
-        private void coshToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\cosh");
-        }
+		private void cosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\cos");
+		}
 
-        private void cotToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\cot");
-        }
+		private void coshToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\cosh");
+		}
 
-        private void cothToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\coth");
-        }
+		private void cotToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\cot");
+		}
 
-        private void cscToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\csc");
-        }
+		private void cothToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\coth");
+		}
 
-        private void degToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\deg");
-        }
+		private void cscToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\csc");
+		}
 
-        private void detToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\det");
-        }
+		private void degToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\deg");
+		}
 
-        private void dimToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\dim");
-        }
+		private void detToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\det");
+		}
 
-        private void expToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\exp");
-        }
+		private void dimToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\dim");
+		}
 
-        private void gcdToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\gcd");
-        }
+		private void expToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\exp");
+		}
 
-        private void homToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\hom");
-        }
+		private void gcdToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\gcd");
+		}
 
-        private void infToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\inf");
-        }
+		private void homToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\hom");
+		}
 
-        private void kerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\ker");
-        }
+		private void infToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\inf");
+		}
 
-        private void lgToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\lg");
-        }
+		private void kerToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\ker");
+		}
 
-        private void limToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\lim");
-        }
+		private void lgToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\lg");
+		}
 
-        private void liminfToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\liminf");
-        }
+		private void limToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\lim");
+		}
 
-        private void limsupToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\limsup");
-        }
+		private void liminfToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\liminf");
+		}
 
-        private void lnToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\ln");
-        }
+		private void limsupToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\limsup");
+		}
 
-        private void logToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\log");
-        }
+		private void lnToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\ln");
+		}
 
-        private void maxToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\max");
-        }
+		private void logToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\log");
+		}
 
-        private void minToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\min");
-        }
+		private void maxToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\max");
+		}
 
-        private void prToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\Pr");
-        }
+		private void minToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\min");
+		}
 
-        private void secToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\sec");
-        }
+		private void prToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\Pr");
+		}
 
-        private void sinToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\sin");
-        }
+		private void secToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\sec");
+		}
 
-        private void sinhToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\sinh");
-        }
+		private void sinToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\sin");
+		}
 
-        private void supToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\sup");
-        }
+		private void sinhToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\sinh");
+		}
 
-        private void tanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\tan");
-        }
+		private void supToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\sup");
+		}
 
-        private void tanhToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            App.Instance.Insert("\\tanh");
-        }
+		private void tanToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\tan");
+		}
 
-        private void previewBtn_Click(object sender, EventArgs e)
-        {
-            App.Instance.Preview();
-        }
+		private void tanhToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			App.Instance.Insert("\\tanh");
+		}
+
+		private void previewBtn_Click(object sender, EventArgs e)
+		{
+			App.Instance.Preview();
+		}
+
+		private void commentToggleBtn_Click(object sender, EventArgs e)
+		{
+
+		}
+
+
+		#endregion		
+
+
 	}
 }

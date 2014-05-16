@@ -19,6 +19,21 @@ namespace LatexEditor
 
         #region Properties
 
+		public OptionManager OpManager
+		{
+			set
+			{
+				if (value != null)
+				{
+					opManager = value;
+					foreach (var item in opManager.SnippetDict)
+					{
+						snippetTreeView.Nodes.Add(item.Key);
+					}
+				}
+			}
+		}
+
         public ComboBox DistroCombo
         {
             get { return this.distroCb; }
@@ -58,6 +73,8 @@ namespace LatexEditor
         {
             get { return this.previewCodeTb; }
         }
+
+		
 
         //public OptionManager OpManager
         //{
@@ -138,7 +155,39 @@ namespace LatexEditor
         {
 
         }
+		
+		private void snippetTreeView_Click(object sender, EventArgs e)
+		{
+			//snippetRtb.Text = opManager.SnippetDict[snippetTreeView.SelectedNode.Text];
+		}
 
         #endregion
+
+		private void addNewNodeBtn_Click(object sender, EventArgs e)
+		{
+			if (!string.IsNullOrEmpty(newSnippetTb.Text))
+			{
+				snippetTreeView.Nodes.Add(newSnippetTb.Text);
+			}
+
+			snippetRtb.Text = string.Empty;
+		}
+
+		private void saveSnipBtn_Click(object sender, EventArgs e)
+		{
+			opManager.SnippetDict[snippetTreeView.SelectedNode.Text] = snippetRtb.Text;
+		}
+
+		private void snippetTreeView_DoubleClick(object sender, EventArgs e)
+		{
+			try
+			{
+				snippetRtb.Text = opManager.SnippetDict[snippetTreeView.SelectedNode.Text];
+			}
+			catch (Exception)
+			{
+
+			}
+		}
     }
 }

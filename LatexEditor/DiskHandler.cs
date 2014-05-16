@@ -6,6 +6,7 @@ using System.Threading;
 using System.IO;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Drawing;
 using LatexHelpers;
 
 namespace LatexEditor
@@ -259,6 +260,14 @@ namespace LatexEditor
 					}
 				}
 
+				else if (fiod.IsImage)
+				{
+					if (File.Exists(fiod.FileName))
+					{
+						fiod.OutputImage = Image.FromFile(fiod.FileName);
+					}
+				}
+
 				else
 				{
 					using ( FileStream stream = new FileStream( fiod.FileName, FileMode.Open, FileAccess.Read, fiod.ShareType, fiod.BlockSize, fiod.IsAsync ) )
@@ -299,7 +308,7 @@ namespace LatexEditor
 				MessageBox.Show( ex.Message );
 			}
 
-			if ( !fiod.Write )
+			if ( !fiod.Write && !fiod.IsImage )
 			{
 				if ( !string.IsNullOrEmpty( fiod.OutputDelimiter ) )
 				{

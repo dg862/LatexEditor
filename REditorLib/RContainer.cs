@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
+using PapyrusDictionary;
 //using System
 
 namespace REditorLib
 {
-	public class RContainer
+	public class RContainer : IContainerAccess
 	{
 		#region Fields
 
@@ -18,6 +20,22 @@ namespace REditorLib
 		public LinkedList<RBase> Nodes
 		{
 			get { return nodes; }
+		}
+
+		public RBase Document
+		{
+			get
+			{
+				foreach (var item in nodes)
+				{
+					if (item.Tag.Contains("begin{document}") && !string.IsNullOrEmpty(item.Tag))
+					{
+						return item;
+					}
+				}
+
+				return null;
+			}
 		}
 
 		#endregion
@@ -95,5 +113,11 @@ namespace REditorLib
 		#region Event handlers
 
 		#endregion
+
+
+		public int Count
+		{
+			get { return this.nodes.Count; }
+		}
 	}
 }
