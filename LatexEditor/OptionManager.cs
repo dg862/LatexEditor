@@ -150,18 +150,31 @@ namespace LatexEditor
                 wr.WriteStartElement("Paths");
 
                 wr.WriteElementString("Distribution", optionForm.DistroCombo.Text);
+				Constants.latexDistribution = optionForm.DistroCombo.Text;
+
                 wr.WriteElementString("DistributionPath", optionForm.DistPathTb.Text);
+				Constants.distributionPath = optionForm.DistPathTb.Text;
 
 				wr.WriteElementString("TexifyPath", optionForm.TexifyPathTb.Text);
+				Constants.texifyPath = optionForm.TexifyPathTb.Text;
 
                 wr.WriteElementString("CompilerPath", optionForm.CompilerPathTb.Text);
+				Constants.compilerName = optionForm.CompilerPathTb.Text;
+
                 wr.WriteElementString("CompilerArgs", optionForm.CompilerArgsTb.Text);
+				Constants.compilerArgs = optionForm.CompilerArgsTb.Text;
 
                 wr.WriteElementString("ImageMagickPath", optionForm.IMagickPathTb.Text);
+				Constants.imageMagickPath = optionForm.IMagickPathTb.Text;
 
                 wr.WriteElementString("TemporaryFilePath", optionForm.TempFilesTb.Text);
+				Constants.scratchPadPath = optionForm.TempFilesTb.Text;
+
                 wr.WriteElementString("PreviewArguments", optionForm.PreviewArgsTb.Text);
+				Constants.previewArgs = optionForm.PreviewArgsTb.Text;
+
                 wr.WriteElementString("PreviewCode", optionForm.PreviewCodeTb.Text);
+				Constants.previewCode = optionForm.PreviewCodeTb.Text;
 
                 wr.WriteEndElement();
 
