@@ -107,6 +107,8 @@ namespace LatexEditor
 
         public void Preview()
         {
+			Interpret(sourceTextBox.PapyrusText);
+
 			if (latexControl.LatexContainer.Document != null)
 			{
 				RBase preamble = latexControl.LatexContainer.Document.Preamble;
@@ -240,27 +242,32 @@ namespace LatexEditor
             int selStart = sourceTextBox.SelectionStart;
             int selLength = sourceTextBox.SelectionLength;
 
-            int lines = Helper.CountLines(code, selStart);
+			//int lines = Helper.CountLines(code, selStart);
 
-            if (selLength > 0)
-            {
-                code = code.Insert(selStart + selLength + lines, what.Substring(what.IndexOf('}')));
-                string temp = code.Substring(selStart + lines, selLength);
-                string temp2 = sourceTextBox.SelectedText;
-                code = code.Insert(selStart + lines, what.Substring(0, what.IndexOf('}')));
-            }
-            else
-            {
-                code = code.Insert(caret + lines, what);
-                sourceTextBox.CaretPosition = caret + what.Length;
-                sourceTextBox.Select(sourceTextBox.CaretPosition, 0);
-            }
+			//if (selLength > 0)
+			//{
+			//	code = code.Insert(selStart + selLength + lines, what.Substring(what.IndexOf('}')));
+			//	string temp = code.Substring(selStart + lines, selLength);
+			//	string temp2 = sourceTextBox.SelectedText;
+			//	code = code.Insert(selStart + lines, what.Substring(0, what.IndexOf('}')));
+			//}
+			//else
+			//{
+			//	//code = code.Insert(caret, what);
+			//	//code = code.Insert(caret + lines, what);
+			//	//sourceTextBox.CaretPosition = caret + what.Length;
+			//	//sourceTextBox.Select(sourceTextBox.CaretPosition, 0);
+			//}
 
+			code = code.Insert(caret, what);
 
-            latexControl.LatexContainer = new RBase("\\documentclass{article}\n\n\\end{document}", "documentclass");
+            latexControl.LatexContainer = new RBase("\\documentclass{article}\n\\end{document}", "documentclass");
+			//latexControl.LatexContainer = new RBase(latexControl.LatexContainer.Document);
 
             LatexInterpreter.Interpret(code, ((RControl)App.Instance.Editor.LatexControl).LatexContainer);
-            sourceTextBox.LatexContainer = ((RControl)App.Instance.Editor.LatexControl).LatexContainer;           
+            sourceTextBox.LatexContainer = ((RControl)App.Instance.Editor.LatexControl).LatexContainer;
+
+			sourceTextBox.CaretPosition = caret + what.Length;
         }
 
         public void InsertDirectly(string what)
@@ -271,17 +278,19 @@ namespace LatexEditor
             int selStart = sourceTextBox.SelectionStart;
             int selLength = sourceTextBox.SelectionLength;
 
-            int lines = Helper.CountLines(code, selStart);
+            //int lines = Helper.CountLines(code, selStart);
 
-            code = code.Insert(caret + lines, what);
-            sourceTextBox.CaretPosition = caret + what.Length;
-            sourceTextBox.Select(sourceTextBox.CaretPosition, 0);
+            //code = code.Insert(caret + lines, what);
+			code = code.Insert(caret, what);
+            //sourceTextBox.Select(sourceTextBox.CaretPosition, 0);
 
 
-            latexControl.LatexContainer = new RBase("\\documentclass{article}\n\n\\end{document}", "documentclass");
+            latexControl.LatexContainer = new RBase("\\documentclass{article}\n\\end{document}", "documentclass");
 
             LatexInterpreter.Interpret(code, ((RControl)App.Instance.Editor.LatexControl).LatexContainer);
-            sourceTextBox.LatexContainer = ((RControl)App.Instance.Editor.LatexControl).LatexContainer;           
+            sourceTextBox.LatexContainer = ((RControl)App.Instance.Editor.LatexControl).LatexContainer;
+
+			sourceTextBox.CaretPosition = caret + what.Length + 1;
         }
 
 		public void Bold()
@@ -448,6 +457,16 @@ namespace LatexEditor
             sourceTextBox.PapyrusText = ((RControl)App.Instance.Editor.LatexControl).LatexContainer.LatexDocumentCode;
         }
 
+		public void Interpret(string code)
+		{
+			latexControl.LatexContainer = new RBase("\\documentclass{article}\n\\end{document}", "documentclass");
+
+			LatexInterpreter.Interpret(code, ((RControl)App.Instance.Editor.LatexControl).LatexContainer);
+
+			sourceTextBox.NeedsRecompilation = false;			
+		}
+
+
 		#endregion
 
 		#region Event handlers
@@ -534,12 +553,16 @@ namespace LatexEditor
 
 		void sourceTextBox_recompilationEvent( string toCompile )
 		{
-			latexControl.LatexContainer = new RBase("\\documentclass{article}\n\\end{document}", "documentclass");
+			Interpret(toCompile);
 
-			LatexInterpreter.Interpret(toCompile, ((RControl)App.Instance.Editor.LatexControl).LatexContainer);
-			//sourceTextBox.LatexContainer = ((RControl)App.Instance.Editor.LatexControl).LatexContainer;
+			//sourceTextBox.NeedsRecompilation = false;
 
-			sourceTextBox.NeedsRecompilation = false;
+			//latexControl.LatexContainer = new RBase("\\documentclass{article}\n\\end{document}", "documentclass");
+
+			//LatexInterpreter.Interpret(toCompile, ((RControl)App.Instance.Editor.LatexControl).LatexContainer);
+			////sourceTextBox.LatexContainer = ((RControl)App.Instance.Editor.LatexControl).LatexContainer;
+
+			//sourceTextBox.NeedsRecompilation = false;
 		}
 
 		void compiler_compilationDone( LatexCompilationArgs args )

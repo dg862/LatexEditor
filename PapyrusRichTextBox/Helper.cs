@@ -213,15 +213,21 @@ namespace PapyrusDictionary
 					break;
 				}
 
-                if (sp[i].Length != 0)
-                {
-                    sumLen += sp[i].Length;
+				sumLen += sp[i].Length;
+				sumLen++;
 
-                    ret++;
-                }
+				ret++;
+
+				//if (sp[i].Length != 0)
+				//{
+				//	sumLen += sp[i].Length;
+
+				//	ret++;
+				//}
 			}
 
-			return ret - 1;
+			return --ret;
+			//return ret - 1;
 		}
 
 		#endregion

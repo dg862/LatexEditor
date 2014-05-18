@@ -26,10 +26,18 @@ namespace LatexEditor
 				if (value != null)
 				{
 					opManager = value;
+
+					snippetTreeView.Nodes.Clear();
+
 					foreach (var item in opManager.SnippetDict)
 					{
 						snippetTreeView.Nodes.Add(item.Key);
 					}
+
+					//foreach (var item in opManager.SnippetDict)
+					//{
+					//	snippetTreeView.Nodes.Add(
+					//}
 				}
 			}
 		}
@@ -211,6 +219,8 @@ namespace LatexEditor
 			{
 				snippetTreeView.Nodes.Add(newSnippetTb.Text);
 			}
+
+			opManager.SnippetDict[newSnippetTb.Text] = snippetRtb.Text;
 
 			snippetRtb.Text = string.Empty;
 			newSnippetTb.Text = string.Empty;

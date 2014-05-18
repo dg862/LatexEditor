@@ -29,7 +29,7 @@ namespace PapyrusDictionary
 		private int						tooltipOffset;
 		private bool					hasTooltip;
 		private bool					needsRecompilation;
-		private int						caretPosition = 0;
+		//private int						caretPosition = 0;
 		private string					temporaryModifiedContent;
 		private bool					isMouseDragging = false;
 		private bool					leftMouseClick = false;
@@ -75,12 +75,25 @@ namespace PapyrusDictionary
 
 		public int CaretPosition
 		{
-			get { return caretPosition; }
+			get { return base.SelectionStart; }
 			set
 			{
-				if ( value > -1 && value < base.Text.Length )
+				if (value != null)
 				{
-					caretPosition = value;
+					if (value < 0)
+					{
+						base.SelectionStart = 0;
+					}
+
+					else if (value > base.Text.Length)
+					{
+						base.SelectionStart = base.Text.Length;
+					}
+
+					else
+					{
+						base.SelectionStart = value;
+					}
 				}
 			}
 		}
@@ -139,7 +152,9 @@ namespace PapyrusDictionary
 				if ( !string.IsNullOrEmpty(value) )
 				{
 
-					caretPosition = 0;
+					//caretPosition = 0;
+					base.SelectionStart = 0;
+					base.SelectionLength = 0;
 					papyrusText.Str = value;
 					scrollBar.Maximum = papyrusText.NumberOfLines;
 					scrollBar.Minimum = 0;
@@ -266,19 +281,6 @@ namespace PapyrusDictionary
 				}
 			}
 		}
-
-		//public System.Drawing.Font PapyrusFont
-		//{
-		//    get { return this.Font; }
-		//    set
-		//    {
-		//        if ( value != null )
-		//        {
-		//            this.Font = value;
-		//            CalculateLinesPerPage();
-		//        }
-		//    }
-		//}
 
 		#endregion
 
@@ -478,9 +480,12 @@ namespace PapyrusDictionary
 				bracketIndex = text.IndexOf( '[', bracketIndex + 1 );
 			}
 
+			int tempCaret = base.SelectionStart;
             base.Rtf = rtb.Rtf;
 
-			base.Select(caretPosition, 0);
+			base.SelectionStart = tempCaret;
+
+			//base.Select(base.SelectionStart, 0);
 		}
 
 		public void PapyrusVScroll( int lines )
@@ -912,36 +917,37 @@ namespace PapyrusDictionary
 			}
 		}
 
-		public int MoveCaret(bool up)
-		{
-			PapyrusString ptxt = this.Text;
+		//public int MoveCaret(bool up)
+		//{
+		//	PapyrusString ptxt = this.Text;
 
-			int lineCnt = ptxt.NumberOfLines;
-			int caretLine = 0;
-			int dir = up ? -1 : 1;
+		//	int lineCnt = ptxt.NumberOfLines;
+		//	int caretLine = 0;
+		//	int dir = up ? -1 : 1;
 
-			if (caretLine + 1 < ptxt.LineIndices.Count)
-			{
-				while (caretPosition > ptxt.LineIndices[caretLine + 1])
-				{
-					caretLine++;
-				}
+		//	if (caretLine + 1 < ptxt.LineIndices.Count)
+		//	{
 
-				int positionInLine = caretPosition - ptxt.LineIndices[caretLine];
+		//		while (	base.SelectionStart > ptxt.LineIndices[caretLine + 1])
+		//		{
+		//			base.SelectionStart++;
+		//		}
 
-				if (caretLine + dir - 1 < 0)
-				{
-					caretPosition = positionInLine;
-				}
+		//		int positionInLine = base.SelectionStart - ptxt.LineIndices[caretLine];
 
-				else
-				{
-					caretPosition = positionInLine + ptxt.LineIndices[caretLine + dir - 1];
-				}
-			}
+		//		if (caretLine + dir - 1 < 0)
+		//		{
+		//			base.SelectionStart = positionInLine;
+		//		}
 
-			return caretPosition;
-		}
+		//		else
+		//		{
+		//			base.SelectionStart = positionInLine + ptxt.LineIndices[caretLine + dir - 1];
+		//		}
+		//	}
+
+		//	return base.SelectionStart;
+		//}
 
         public void InsertTooltipCommand()
         {
@@ -956,15 +962,16 @@ namespace PapyrusDictionary
 		{
 			string toInsert = what;
 			int i = 0;
+			int tempCaret = base.SelectionStart;
 			while (toInsert[i] != '\\' && i < toInsert.Length)
 			{
 				i++;
 			}
 			toInsert = toInsert.Substring(i);
 
-			this.Text = this.Text.Insert(CaretPosition, toInsert.Substring(command.Length, toInsert.Length - command.Length));
-			caretPosition += toInsert.Length - command.Length;
-			base.Select(caretPosition, 0);
+			this.Text = this.Text.Insert(base.SelectionStart, toInsert.Substring(command.Length, toInsert.Length - command.Length));
+			tempCaret += toInsert.Length - command.Length;
+			base.SelectionStart = tempCaret;
 		}
 
 		public string ReverseString(string s)
@@ -974,72 +981,72 @@ namespace PapyrusDictionary
 			return new string(arr);
 		}
 
-		public void MoveCaretHorizontal(bool left, int num)
-		{
+		//public void MoveCaretHorizontal(bool left, int num)
+		//{
 
-			int i = 0;
-			if (left)
-			{
-				while (i < num)
-				{
-					if (caretPosition - 1 > -1)
-					{
-						if (base.Text.Length > 0)
-						{
-							if (base.Text[caretPosition - 1] == '\n')
-							{
-								caretPosition--;
-								if (caretPosition - 1 > -1)
-								{
-									if (base.Text[caretPosition - 1] == '\r')
-									{
-										caretPosition--;
-									}
-								}
-							}
-						}
+		//	int i = 0;
+		//	if (left)
+		//	{
+		//		while (i < num)
+		//		{
+		//			if (base.SelectionStart - 1 > -1)
+		//			{
+		//				if (base.Text.Length > 0)
+		//				{
+		//					if (base.Text[base.SelectionStart - 1] == '\n')
+		//					{
+		//						base.SelectionStart--;
+		//						if (base.SelectionStart - 1 > -1)
+		//						{
+		//							if (base.Text[base.SelectionStart - 1] == '\r')
+		//							{
+		//								base.SelectionStart--;
+		//							}
+		//						}
+		//					}
+		//				}
 
-						caretPosition--;
-					}
+		//				base.SelectionStart--;
+		//			}
 
-					i++;
-				}
-			}
+		//			i++;
+		//		}
+		//	}
 
-			else
-			{
-				while (i < num)
-				{
-					if (caretPosition + 1 < base.Text.Length)
-					{
-						caretPosition++;
-					}
+		//	else
+		//	{
+		//		while (i < num)
+		//		{
+		//			if (base.SelectionStart + 1 < base.Text.Length)
+		//			{
+		//				base.SelectionStart++;
+		//			}
 
-					if (caretPosition + 1 < base.Text.Length)
-					{
-						if (base.Text[caretPosition + 1] == '\r')
-						{
-							caretPosition++;
-							if (caretPosition + 1 < base.Text.Length)
-							{
-								if (base.Text[caretPosition + 1] == '\n')
-								{
-									caretPosition++;
-								}
-							}
-						}
+		//			if (base.SelectionStart + 1 < base.Text.Length)
+		//			{
+		//				if (base.Text[base.SelectionStart + 1] == '\r')
+		//				{
+		//					base.SelectionStart++;
+		//					if (base.SelectionStart + 1 < base.Text.Length)
+		//					{
+		//						if (base.Text[base.SelectionStart + 1] == '\n')
+		//						{
+		//							base.SelectionStart++;
+		//						}
+		//					}
+		//				}
 
-						caretPosition--;
-					}
+		//				base.SelectionStart--;
+		//			}
 
-					caretPosition++;
+		//			base.SelectionStart++;
 
-					i++;
+		//			i++;
 
-				}
-			}
+		//		}
+		//	}
 
-		}
+		//}
 
 		#endregion
 
@@ -1120,8 +1127,8 @@ namespace PapyrusDictionary
 				int temp = GetCharIndexFromPosition( e.Location );
 				if ( temp < base.Text.Length )
 				{
-					caretPosition = temp;
-					base.Select( caretPosition, 0 );
+					base.SelectionStart = temp;
+					base.Select(base.SelectionStart, 0);
 				}
 			}
 
@@ -1186,9 +1193,10 @@ namespace PapyrusDictionary
 
 			if ( needsRecompilation )
 			{
-				//PapyrusText = base.Text;
-				PapyrusText = temporaryModifiedContent;
-				SignalForRecompilation( papyrusText.Str );
+				PapyrusText = base.Text;
+				needsRecompilation = true;
+				//PapyrusText = temporaryModifiedContent;
+				//SignalForRecompilation( papyrusText.Str );
 			}
 		}
 
@@ -1226,11 +1234,11 @@ namespace PapyrusDictionary
 					e.SuppressKeyPress = true;
 				}
 
-				if (caretPosition + 1 < base.Text.Length)
+				if (base.SelectionStart + 1 < base.Text.Length)
 				{
-					if (base.Text[caretPosition + 1] == '}' || base.Text[caretPosition + 1] == ']' || base.Text[caretPosition + 1] == '>')
+					if (base.Text[base.SelectionStart + 1] == '}' || base.Text[base.SelectionStart + 1] == ']' || base.Text[base.SelectionStart + 1] == '>')
 					{
-						HighlightBracket(caretPosition);
+						HighlightBracket(base.SelectionStart);
 					}
 				}
 			}
@@ -1239,26 +1247,37 @@ namespace PapyrusDictionary
 			{
 				int i = 1;
 				string snip = string.Empty;
-				while (caretPosition - i > -1 && (this.Text[caretPosition - i] != '\n' && this.Text[caretPosition - i] != ' '))
+				while (base.SelectionStart - i > -1 && (this.Text[base.SelectionStart - i] != '\n' && this.Text[base.SelectionStart - i] != ' '))
 				{
-					snip += this.Text[caretPosition - i];
+					snip += this.Text[base.SelectionStart - i];
 					i++;
 				}
+
+				i--;
 
 				snip = ReverseString(snip);
 
 				if (snippets.ContainsKey(snip))
 				{
-					this.Text = this.Text.Insert(caretPosition, snippets[snip]);
+					int tempCaret = base.SelectionStart;
+					this.Text = this.Text.Insert(base.SelectionStart, snippets[snip]);
 
-					this.Text = this.Text.Remove(caretPosition - i + 1, snip.Length);
+					//this.Text = this.Text.Remove(base.SelectionStart - i + 1, snip.Length);
+					this.Text = this.Text.Remove(tempCaret - snip.Length, snip.Length);
 
-					caretPosition += snippets[snip].Length;
-					caretPosition -= snip.Length;
+					//base.SelectionStart = tempCaret;
 
-					base.Select(caretPosition, 0);
+					//base.SelectionStart += snippets[snip].Length;
+					//base.SelectionStart -= snip.Length;
 
-					recompilationEvent(this.Text);
+					tempCaret += snippets[snip].Length;
+					tempCaret -= snip.Length;
+
+					base.SelectionStart = tempCaret;
+
+					//base.Select(base.SelectionStart, 0);
+
+					//recompilationEvent(this.Text);
 
 					SyntaxHighlight();
 				}
@@ -1269,7 +1288,7 @@ namespace PapyrusDictionary
 			else if (e.KeyCode == Keys.Back)
 			{
 				//caretPosition = caretPosition - 1 > -1 ? caretPosition-- : caretPosition;
-				caretPosition = base.SelectionStart;
+				base.SelectionStart = base.SelectionStart;
 				if (toolTip.Visible)
 				{
 					command = command.Substring(0, command.Length - 1);
@@ -1309,7 +1328,7 @@ namespace PapyrusDictionary
                 }
                 else
                 {
-                    MoveCaret(true);
+                    //MoveCaret(true);
                 }
 			}
 
@@ -1323,13 +1342,13 @@ namespace PapyrusDictionary
                 }
                 else
                 {
-                    MoveCaret(false);
+                   // MoveCaret(false);
                 }
 			}
 
 			else if ( e.KeyCode == Keys.Left )
 			{
-				MoveCaretHorizontal(true, 1);
+				//MoveCaretHorizontal(true, 1);
 			}
 
 			else if ( e.KeyCode == Keys.Right )
@@ -1343,7 +1362,7 @@ namespace PapyrusDictionary
 
 				else
 				{
-					MoveCaretHorizontal(false, 1);
+					//MoveCaretHorizontal(false, 1);
 				}
 			}
 
@@ -1352,7 +1371,7 @@ namespace PapyrusDictionary
 				//int caretBackup = caretPosition;
 				//MoveCaret(false);
 				//caretPosition++;
-				caretPosition = base.SelectionStart;
+				//caretPosition = base.SelectionStart;
 				SyntaxHighlight();
 				//base.Select(caretPosition, 0);
 			}
@@ -1387,14 +1406,14 @@ namespace PapyrusDictionary
             if (e.KeyChar == '\\')
             {
                 command = "\\";
-                tooltipLocation = this.GetPositionFromCharIndex(this.CaretPosition + 50);
+                tooltipLocation = this.GetPositionFromCharIndex(base.SelectionStart + 50);
                 DisplayTooltip(tooltipLocation);
-                caretPosition++;
+               // base.SelectionStart++;
             }
 
             else if (((int)e.KeyChar > 64 && (int)e.KeyChar < 91) || ((int)e.KeyChar > 96 && (int)e.KeyChar < 123))
             {
-                caretPosition++;
+                //base.SelectionStart++;
 				if (toolTip.Visible)
 				{
 					command += e.KeyChar;
