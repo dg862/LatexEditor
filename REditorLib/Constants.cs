@@ -8,19 +8,18 @@ namespace REditorLib
 	{
 		#region Fields
 
-		//public const string				compilerPath = @"C:\Program Files (x86)\MiKTeX 2.9\miktex\bin\pdflatex.exe";
-		//public const string				imageMagickPath = @"C:\Program Files (x86)\ImageMagick-6.8.7-Q16\imgconvert.exe";
+		public const string				texifyPath = @"texify.exe";
         public static string                latexDistribution;
         public static string                distributionPath;
-		public static string				compilerPath = @"scratch\pdflatex.exe";
-		public static string				imageMagickPath = @"scratch\imgconvert.exe";
-		public static string				defaultCompilerArgs = "-shell-escape -max-print-line=120 -interaction=nonstopmode";
+		public const string				compilerPath = @"pdflatex.exe";
+		public const string				imageMagickPath = @"convert.exe";
+		public const string				defaultCompilerArgs = "-shell-escape -max-print-line=120 -interaction=nonstopmode";
 		//public static string				defaultPreviewArgs = "-shell-escape -density 300 -quality 90";
-		public static string defaultPreviewArgs = "-shell-escape";
+		public const string defaultPreviewArgs = "-shell-escape";
 
 		public static int density = 300;
 
-		public static string defaultPreviewCode = @"	\documentclass[border=0pt,convert={convertexe={imgconvert.exe},density=300,outext=.png}]{standalone}\usepackage{varwidth}
+		public const string defaultPreviewCode = @"	\documentclass[border=0pt,convert={convertexe={imgconvert.exe},density=300,outext=.png}]{standalone}\usepackage{varwidth}
 																\begin{document}
 																\begin{varwidth}{\linewidth}
 																%
@@ -36,7 +35,7 @@ namespace REditorLib
 		//																\end{document}
 		//																";
 
-		public static string			scratchPadPath = @"scratch\";
+		public const string			scratchPadPath = @"scratch\";
 		public static List<string>		preambleTags = new List<string>{ "title", "author" };
 		public static List<string>		beginnerTags = new List<string> { "begin" };
 		public static List<string>		enderTags = new List<string> { "end" };

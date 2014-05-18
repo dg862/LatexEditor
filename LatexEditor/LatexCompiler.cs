@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.ComponentModel;
 using LatexHelpers;
+using System.IO;
 
 namespace LatexEditor
 {
@@ -157,7 +158,7 @@ namespace LatexEditor
 			{
 				args = ((LatexCompilationArgs)toCompile[0]);
 				toCompile.RemoveAt( 0 );
-				e.Result = args;													//set the result to the io descriptor so that the manager can know the ID
+				e.Result = args;													//Set the result to the io descriptor so that the manager can know the ID.
 			}
 			finally
 			{
@@ -166,24 +167,16 @@ namespace LatexEditor
 
 			if ( args.Preview )
 			{
-                //RunProcess(args.CompilerPath, args.LatexCode);
                 RunProcess(args.CompilerPath, args.CompilerArgs);
-				RunProcess(Constants.imageMagickPath, "-density 300 -quality 90 " + args.ID + ".pdf" + " " + args.ID + ".png");
 
-				//string testCode = @"\documentclass[border=0pt,convert={density=300,outext=.png}]{standalone}\usepackage{varwidth}\begin{document}\begin{varwidth}{\linewidth}
-//\section{Introduction}Here is the text of your introduction.\end{varwidth}\end{document}";
-//				string path = "\"E:\\Google Drive\\munka\\diplomaterv\\diplomaterv 1\\test1.tex\"";
-				//RunProcess( args.CompilerPath, args.CompilerArgs + " " + args.LatexCode );
-				//RunProcess( args.PreviewCommandPath, args.PreviewCommandArgs + " " + args.PDFFile + " " + args.PngFile );
-				//RunProcess( args.CompilerPath, args.CompilerArgs + " " + args.LatexCode );
-		//		RunProcess( args.CompilerPath, args.CompilerArgs + " " + path );
-				//RunProcess( args.CompilerPath, args.CompilerArgs + " " + @"E:\test1.tex");		//works
-				//RunProcess( args.CompilerPath, args.CompilerArgs + " " + testCode);
+				string pathArgs = "\"" + Directory.GetCurrentDirectory() + "\\" + Constants.pdfPath + "\\" + args.ID + ".pdf" + "\" \"" + Directory.GetCurrentDirectory() + "\\" + Constants.pdfPath + "\\" + args.ID + ".png\"";
+				RunProcess(Constants.imageMagickPath, "-density 300 -quality 90 " + pathArgs);
 			}
 
 			else
 			{
-			//	RunProcess( args.CompilerPath, args.CompilerArgs + " " + args.TexFile );
+				//RunProcess( args.CompilerPath, args.CompilerArgs + " " + args.TexFile );
+				RunProcess(args.CompilerPath, args.CompilerArgs);
 			}
 		}
 

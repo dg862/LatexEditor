@@ -148,21 +148,33 @@ namespace REditorLib
 						if ( tags[i].Contains( Constants.beginnerTags[j] ) )
 						{
 							int endIndex = Helper.FindEndTag( tags, i );
+							RBase toAdd;
 
-							RBase toAdd = new RBase( '\\' + tags[i] + Constants.insertSign + '\\' + tags[endIndex], tags[i] );
-							//RBase toAdd = new RBase( '\\' + tags[i] + tags[endIndex], tags[i] );
-
-							string[] newTags = new string[endIndex - i];
-							for ( int k = 0; k < endIndex - i - 1; k++ )
+							if (endIndex == -1)
 							{
-								newTags[k] = tags[i + k + 1];
+								toAdd = new RBase('\\' + tags[i], tags[i]);
+								i++;
 							}
 
-							RecursivelyCreateObjects( newTags, toAdd );
+							else
+							{
+								toAdd = new RBase('\\' + tags[i] + Constants.insertSign + '\\' + tags[endIndex], tags[i]);
+
+								//RBase toAdd = new RBase( '\\' + tags[i] + tags[endIndex], tags[i] );
+
+								string[] newTags = new string[endIndex - i];
+								for (int k = 0; k < endIndex - i - 1; k++)
+								{
+									newTags[k] = tags[i + k + 1];
+								}
+
+								RecursivelyCreateObjects(newTags, toAdd);
+
+								i = endIndex + 1;
+							}
 
 							parent.AddToContainer( toAdd );
 
-							i = endIndex + 1;
 							break;
 						}
 					}
@@ -176,11 +188,14 @@ namespace REditorLib
 					//Check for pairless opening brackets.
 					if ( ( index = tags[i].IndexOf( '{' ) ) != -1 )
 					{
+						//int[] storedBracket = bracketIndex;
 						bracketIndex = Helper.FindMatchingBracketSingleTag( tags, new int[2] { i, index }, PapyrusDictionary.Constants.BracketType.Braces );
 
 						//This means that this tag has childs tags.
 						if ( bracketIndex[0] == -1 || bracketIndex[1] == -1 )
 						{
+							//bracketIndex = storedBracket;
+							bracketIndex = new int[2] {i, index };
 							string code = "\\" + tags[i].Substring( 0, tags[i].IndexOf( '{' ) + 1 ) + Constants.insertSign;
 							int[] endIndex = new int[2] { -1, -1 };
 

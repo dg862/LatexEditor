@@ -112,7 +112,8 @@ namespace LatexEditor
                 if (optionForm.DistroCombo.Items.IndexOf("MiKTeX") != -1)
                 {
                     optionForm.DistPathTb.Text = miktexPath;
-                    optionForm.CompilerPathTb.Text = miktexPath + Constants.compilerName;
+					optionForm.TexifyPathTb.Text = miktexPath + REditorLib.Constants.texifyPath;
+					optionForm.CompilerPathTb.Text = miktexPath + REditorLib.Constants.compilerPath;
                     optionForm.CompilerArgsTb.Text = REditorLib.Constants.defaultCompilerArgs;
                     optionForm.TempFilesTb.Text = REditorLib.Constants.scratchPadPath;
                     optionForm.PreviewArgsTb.Text = REditorLib.Constants.defaultPreviewArgs;
@@ -122,7 +123,8 @@ namespace LatexEditor
                 else
                 {
                     optionForm.DistPathTb.Text = texlivePath;
-                    optionForm.CompilerPathTb.Text = texlivePath + Constants.compilerName;
+					optionForm.TexifyPathTb.Text = texlivePath + REditorLib.Constants.texifyPath;
+					optionForm.CompilerPathTb.Text = texlivePath + REditorLib.Constants.compilerPath;
                     optionForm.CompilerArgsTb.Text = REditorLib.Constants.defaultCompilerArgs;
                     optionForm.TempFilesTb.Text = REditorLib.Constants.scratchPadPath;
                     optionForm.PreviewArgsTb.Text = REditorLib.Constants.defaultPreviewArgs;
@@ -132,10 +134,8 @@ namespace LatexEditor
 
             if (!string.IsNullOrEmpty(iMagickPath))
             {
-                optionForm.IMagickPathTb.Text = iMagickPath;
+				optionForm.IMagickPathTb.Text = iMagickPath + "\\" + REditorLib.Constants.imageMagickPath;
             }
-
-            //App.Instance.OptionForm.DistroCombo.Items;
         }
 
         public void SaveOptions()
@@ -151,6 +151,8 @@ namespace LatexEditor
 
                 wr.WriteElementString("Distribution", optionForm.DistroCombo.Text);
                 wr.WriteElementString("DistributionPath", optionForm.DistPathTb.Text);
+
+				wr.WriteElementString("TexifyPath", optionForm.TexifyPathTb.Text);
 
                 wr.WriteElementString("CompilerPath", optionForm.CompilerPathTb.Text);
                 wr.WriteElementString("CompilerArgs", optionForm.CompilerArgsTb.Text);
@@ -176,6 +178,41 @@ namespace LatexEditor
 			}			
         }
 
+		public void SaveDefaultOptions()
+		{
+			XmlWriterSettings settings = new XmlWriterSettings() { Indent = true };
+
+			using (XmlWriter wr = XmlWriter.Create(Constants.optionsFile, settings))
+			{
+
+				wr.WriteStartElement("LatexEditorOptions");
+
+				wr.WriteStartElement("Paths");
+
+				wr.WriteElementString("Distribution", string.Empty);
+				wr.WriteElementString("DistributionPath", string.Empty);
+
+				wr.WriteElementString("TexifyPath", string.Empty);
+
+				wr.WriteElementString("CompilerPath", string.Empty);
+				wr.WriteElementString("CompilerArgs", string.Empty);
+
+				wr.WriteElementString("ImageMagickPath", string.Empty);
+
+				wr.WriteElementString("TemporaryFilePath", string.Empty);
+				wr.WriteElementString("PreviewArguments", string.Empty);
+				wr.WriteElementString("PreviewCode", string.Empty);
+
+				wr.WriteEndElement();
+
+				wr.WriteStartElement("Snippets");
+
+				wr.WriteEndElement();
+
+				wr.WriteEndElement();
+			}
+		}
+
         public void Load()
         {
             if (File.Exists(Constants.optionsFile))
@@ -188,6 +225,14 @@ namespace LatexEditor
                 id = fiod.ID;
                 readRequest(fiod);
             }
+
+			//If an options file does not exist, create a default file.
+			else
+			{
+				SaveDefaultOptions();
+
+				MessageBox.Show("Options file does not exist. Creating a default one. Please set the necessary paths in Tools->Options before using the program.");
+			}
         }
 
         public void ProcessOptions()
@@ -214,54 +259,76 @@ namespace LatexEditor
                     throw new Exception("Wrong option file format.");
                 }
 
-                XmlElement elem = (XmlElement)docRoot.SelectSingleNode("Paths");
-
-                XmlNode innerNode = elem.SelectSingleNode("Distribution");
-                distribution = innerNode.InnerText;
-
-                innerNode = elem.SelectSingleNode("DistributionPath");
-                if (distribution == "MiKTeX")
-                {
-                    miktexPath = innerNode.InnerText;
-                    REditorLib.Constants.distributionPath = miktexPath;
-                }
-
-                else if(distribution == "TeX Live")
-                {
-                    texlivePath = innerNode.InnerText;
-                    REditorLib.Constants.distributionPath = texlivePath;
-                }
-
-                innerNode = elem.SelectSingleNode("CompilerPath");
-                REditorLib.Constants.compilerPath = innerNode.InnerText;
-
-                innerNode = elem.SelectSingleNode("CompilerArgs");
-                REditorLib.Constants.defaultCompilerArgs = innerNode.InnerText;
-
-                innerNode = elem.SelectSingleNode("ImageMagickPath");
-                REditorLib.Constants.imageMagickPath = innerNode.InnerText;
-
-                innerNode = elem.SelectSingleNode("TemporaryFilePath");
-                REditorLib.Constants.scratchPadPath = innerNode.InnerText;
-
-                innerNode = elem.SelectSingleNode("PreviewArguments");
-                REditorLib.Constants.defaultPreviewArgs = innerNode.InnerText;
-
-                innerNode = elem.SelectSingleNode("PreviewCode");
-                REditorLib.Constants.defaultPreviewCode = innerNode.InnerText;
-
-                REditorLib.Constants.latexDistribution = distribution;
-
-				elem = (XmlElement)docRoot.SelectSingleNode("Snippets");
-				if (elem != null)
+				try
 				{
-					innerNode = elem.SelectSingleNode("*");
+					XmlElement elem = (XmlElement)docRoot.SelectSingleNode("Paths");
 
-					while (innerNode != null)
+					XmlNode innerNode = elem.SelectSingleNode("Distribution");
+					distribution = innerNode.InnerText;
+					LatexEditor.Constants.latexDistribution = distribution;
+
+					innerNode = elem.SelectSingleNode("DistributionPath");
+					if (distribution == "MiKTeX")
 					{
-						snippetDict.Add(innerNode.Name, innerNode.InnerText);
-						innerNode = innerNode.NextSibling;
+						miktexPath = innerNode.InnerText;
+						REditorLib.Constants.distributionPath = miktexPath;
+						LatexEditor.Constants.distributionPath = miktexPath;
 					}
+
+					else if (distribution == "TeX Live")
+					{
+						texlivePath = innerNode.InnerText;
+						REditorLib.Constants.distributionPath = texlivePath;
+						LatexEditor.Constants.distributionPath = texlivePath;
+					}
+
+					innerNode = elem.SelectSingleNode("CompilerPath");
+					//REditorLib.Constants.compilerPath = innerNode.InnerText;
+					LatexEditor.Constants.compilerName = innerNode.InnerText;
+
+					innerNode = elem.SelectSingleNode("CompilerArgs");
+					LatexEditor.Constants.compilerArgs = innerNode.InnerText;
+					//REditorLib.Constants.defaultCompilerArgs = innerNode.InnerText;
+
+					innerNode = elem.SelectSingleNode("ImageMagickPath");
+					//REditorLib.Constants.imageMagickPath = innerNode.InnerText;
+					LatexEditor.Constants.imageMagickPath = innerNode.InnerText;
+
+					innerNode = elem.SelectSingleNode("TexifyPath");
+					//REditorLib.Constants.texifyPath = innerNode.InnerText;
+					LatexEditor.Constants.texifyPath = innerNode.InnerText;
+
+					innerNode = elem.SelectSingleNode("TemporaryFilePath");
+					LatexEditor.Constants.scratchPadPath = innerNode.InnerText;
+					//REditorLib.Constants.scratchPadPath = innerNode.InnerText;
+
+					innerNode = elem.SelectSingleNode("PreviewArguments");
+					LatexEditor.Constants.previewArgs = innerNode.InnerText;
+					//REditorLib.Constants.defaultPreviewArgs = innerNode.InnerText;
+
+					innerNode = elem.SelectSingleNode("PreviewCode");
+					LatexEditor.Constants.previewCode = innerNode.InnerText;
+					//REditorLib.Constants.defaultPreviewCode = innerNode.InnerText;
+
+					REditorLib.Constants.latexDistribution = distribution;
+					LatexEditor.Constants.latexDistribution = distribution;
+
+					elem = (XmlElement)docRoot.SelectSingleNode("Snippets");
+					if (elem != null)
+					{
+						innerNode = elem.SelectSingleNode("*");
+
+						while (innerNode != null)
+						{
+							snippetDict.Add(innerNode.Name, innerNode.InnerText);
+							innerNode = innerNode.NextSibling;
+						}
+					}
+
+				}
+				catch (Exception)
+				{
+					MessageBox.Show("Wrong options file. Try deleting it to get the default one.");
 				}
             }         
         }

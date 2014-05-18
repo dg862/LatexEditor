@@ -169,7 +169,7 @@ namespace PapyrusDictionary
 				}
 
 				//Otherwise, if we found a new opening bracket - recursively find its pair.
-				else if ( tags[i] == ( forward ? Constants.closingBrackets[(int) bracket] : Constants.openingBrackets[(int) bracket] ) )
+				else if ( tags[i] == ( forward ? Constants.openingBrackets[(int) bracket] : Constants.closingBrackets[(int) bracket] ) )
 				{
 					var temp = FindMatchingBracket( tags, forward ? i + 1 : i - 1, bracket, forward );
 
@@ -183,9 +183,19 @@ namespace PapyrusDictionary
 
 		public static int FindNextDelimiter( string str, int index) 
 		{
+			if (index >= str.Length)
+			{
+				return -1;
+			}
+
 			while ( str[index] != '\n' && str[index] != '{' && str[index] != '[' && index < str.Length )
 			{
 				index++;
+				
+				if (index >= str.Length)
+				{
+					return -1;
+				}
 			}
 
 			return index;

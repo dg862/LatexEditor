@@ -21,7 +21,7 @@ namespace LatexEditor
 		private RControl			latexControl;
 		private WebBrowser			browser;
 		private string				compilationID;
-        private string              previewCodeID;
+        //private string              previewCodeID;
         private OptionManager       optionsManager;
 		private int					previewCnt = 0;
 
@@ -71,36 +71,52 @@ namespace LatexEditor
 
 		public void DeletePreviousPreviews()
 		{
-			DirectoryInfo di = new DirectoryInfo(Constants.scratchPadPath);
-
-			foreach (var item in di.EnumerateFiles())
+			if (!Directory.Exists(Constants.scratchPadPath))
 			{
-				if (item.Name.Contains(".tex"))
-				{
-					item.Delete();
-				}
+				Directory.CreateDirectory(Constants.scratchPadPath);
 			}
 
-			di = new DirectoryInfo(Directory.GetCurrentDirectory());
-
-			foreach (var item in di.EnumerateFiles())
+			if (!Directory.Exists(Constants.pdfPath))
 			{
-				if (item.Name.Contains(".png") || item.Name.Contains(".pdf") || item.Name.Contains(".log") || item.Name.Contains(".aux"))
+				Directory.CreateDirectory(Constants.pdfPath);
+			}
+
+			else
+			{
+				DirectoryInfo di = new DirectoryInfo(Constants.scratchPadPath);
+
+				foreach (var item in di.EnumerateFiles())
 				{
-					item.Delete();
+					if (item.Name.Contains(".png") || item.Name.Contains(".pdf") || item.Name.Contains(".log") || item.Name.Contains(".aux") || item.Name.Contains(".log") || item.Name.Contains(".tex"))
+					{
+						item.Delete();
+					}
+				}
+
+				di = new DirectoryInfo(Constants.pdfPath);
+
+				foreach (var item in di.EnumerateFiles())
+				{
+					if (item.Name.Contains(".png") || item.Name.Contains(".pdf") || item.Name.Contains(".log") || item.Name.Contains(".aux") || item.Name.Contains(".log"))
+					{
+						item.Delete();
+					}
 				}
 			}
 		}
 
         public void Preview()
         {
-			RBase preamble = latexControl.LatexContainer.Document.Preamble;
-
-			foreach (var item in latexControl.LatexContainer.Document.Children)
+			if (latexControl.LatexContainer.Document != null)
 			{
-				if (!item.IsPreambleTag)
+				RBase preamble = latexControl.LatexContainer.Document.Preamble;
+
+				foreach (var item in latexControl.LatexContainer.Document.Children)
 				{
-					CreatePreviewElement(item, preamble);
+					if (!item.IsPreambleTag)
+					{
+						CreatePreviewElement(item, preamble);
+					}
 				}
 			}
         }
@@ -165,17 +181,11 @@ namespace LatexEditor
 		{
 			browser.Stop();
 			browser.Navigate( "about:blank" );
-			//( (WebBrowser) ( (EditorForm) editorForm ).OutputViewer ).Stop();
 
 			if ( File.Exists( Constants.defaultFilename ) )
 			{
 				File.Delete( Constants.defaultFilename );
 			}
-
-			//if ( File.Exists( Constants.defaultOutputFile ) )
-			//{
-			//    File.Delete( Constants.defaultOutputFile );
-			//}
 
 			compilationID = Guid.NewGuid().ToString();
 			FileIODescriptor fiod = new FileIODescriptor( compilationID, sourceTextBox.PapyrusText );
@@ -183,19 +193,6 @@ namespace LatexEditor
 			fiod.FileName = Constants.defaultFilename;
 
 			diskHandler.AddFileToAccessQueue( fiod );
-
-
-			//using ( StreamWriter wr = new StreamWriter( Constants.defaultFilename ) )
-			//{
-			//    string source = App.Instance.Editor.SourceTextBox.Text;
-			//    wr.Write( source );
-			//}
-
-			//compiler.Compile();
-
-			//browser.Navigate( Application.StartupPath + "\\" + Constants.defaultOutputFile );
-
-			//pdfPreview.LoadDocument( Constants.defaultOutputFile );
 		}
 
 		public void CompileSelection()
@@ -224,7 +221,7 @@ namespace LatexEditor
 
 			if ( !toCompile.Contains( @"\end{document}" ) )
 			{
-				toCompile = toCompile.Insert( toCompile.Length - 1, @"\end{document}" );
+				toCompile = toCompile.Insert( toCompile.Length, @"\end{document}" );
 			}
 
 
@@ -460,20 +457,21 @@ namespace LatexEditor
 			int index = 0;
 			if ( sourceTextBox.CurrentID == ( fiod.ID ))
 			{
-				try
-				{
-					LatexInterpreter.Interpret( fiod.Output, ( (RControl) App.Instance.Editor.LatexControl ).LatexContainer );
+				LatexInterpreter.Interpret(fiod.Output, ((RControl)App.Instance.Editor.LatexControl).LatexContainer);
 
-					sourceTextBox.LatexContainer = ( (RControl) App.Instance.Editor.LatexControl ).LatexContainer;
-					//sourceTextBox.PapyrusText = fiod.Output;
-				}
-				catch ( Exception ex )
-				{
-					MessageBox.Show( ex.Message );
-					MessageBox.Show( ex.InnerException.Message );
-				}
+				sourceTextBox.LatexContainer = ((RControl)App.Instance.Editor.LatexControl).LatexContainer;
 
-				//latexControl.RecompileAll();
+				//try
+				//{
+				//	LatexInterpreter.Interpret( fiod.Output, ( (RControl) App.Instance.Editor.LatexControl ).LatexContainer );
+
+				//	sourceTextBox.LatexContainer = ( (RControl) App.Instance.Editor.LatexControl ).LatexContainer;
+				//}
+				//catch ( Exception ex )
+				//{
+				//	MessageBox.Show( ex.Message );
+				//	MessageBox.Show( ex.InnerException.Message );
+				//}
 
 			}
 
@@ -482,6 +480,13 @@ namespace LatexEditor
 				LatexCompilationArgs args = new LatexCompilationArgs();
 				args.ID = fiod.ID;
 				args.TexFile = fiod.FileName;
+
+				string workingDir = Directory.GetCurrentDirectory() + "\\";
+				workingDir = "\"" + workingDir;
+				string endElem = "\" ";
+
+				args.CompilerArgs = "-output-directory=" + workingDir + Constants.pdfPath + endElem + workingDir + fiod.FileName + endElem;
+				args.CompilerPath = Constants.compilerName;
 
 				compiler.AddToCompilationQueue( args );
 			}
@@ -492,12 +497,11 @@ namespace LatexEditor
                 optionsManager.ProcessOptions();
             }
 
-            //else if(previewCodeID == fiod.ID)
 			else if ((index = latexControl.LatexContainer.Document.ContainsID(fiod.ID)) != -1)
             {
 				if (fiod.IsImage)
 				{
-					latexControl.LatexContainer.Document.SetImage(index, fiod.OutputImage);
+					latexControl.LatexContainer.Document.SetImage(index, fiod.OutputImage, false);
 					previewCnt--;
 					if (previewCnt == 0)
 					{
@@ -509,15 +513,19 @@ namespace LatexEditor
 				{
 					LatexCompilationArgs args = new LatexCompilationArgs();
 					args.Preview = true;
-					//args.LatexCode = latexControl.LatexContainer.LatexDocumentPreviewCode;
+
 					args.LatexCode = fiod.Output;
 					args.ID = fiod.ID;
-					//compilationID = args.ID;
+
 					args.CompilerPath = Constants.compilerName;
-					args.CompilerArgs = Constants.defaultPreviewArgs + " " + fiod.FileName;
-					//args.CompilerArgs = "-shell-escape -jobname " + Constants.scratchPadPath + fiod.ID + ".pdf " + fiod.FileName;
-					//args.CompilerArgs = "-shell-escape " + fiod.FileName;
-					args.PngFile = fiod.ID + ".png";
+
+					string workingDir = Directory.GetCurrentDirectory() + "\\";
+					workingDir = "\"" + workingDir;
+					string endElem = "\" ";
+
+					args.CompilerArgs = Constants.previewArgs + " -output-directory=" + workingDir + Constants.pdfPath + endElem + workingDir + fiod.FileName + endElem;
+					
+					args.PngFile = Constants.pdfPath + "\\" + fiod.ID + ".png";
 
 					compiler.AddToCompilationQueue(args);
 				}
@@ -526,10 +534,10 @@ namespace LatexEditor
 
 		void sourceTextBox_recompilationEvent( string toCompile )
 		{
-            latexControl.LatexContainer = new RBase("\\documentclass{article}\n\n\\end{document}", "documentclass");
+			latexControl.LatexContainer = new RBase("\\documentclass{article}\n\\end{document}", "documentclass");
 
-			LatexInterpreter.Interpret( toCompile, ( (RControl) App.Instance.Editor.LatexControl ).LatexContainer );
-			sourceTextBox.LatexContainer = ( (RControl) App.Instance.Editor.LatexControl ).LatexContainer;
+			LatexInterpreter.Interpret(toCompile, ((RControl)App.Instance.Editor.LatexControl).LatexContainer);
+			//sourceTextBox.LatexContainer = ((RControl)App.Instance.Editor.LatexControl).LatexContainer;
 
 			sourceTextBox.NeedsRecompilation = false;
 		}
@@ -538,29 +546,35 @@ namespace LatexEditor
 		{
 			if (!string.IsNullOrEmpty(compilationID))
 			{
-				if (compilationID.ToString() == args.ID)
+				if (compilationID.ToString() == args.ID && !args.Preview)
 				{
-					if (args.Preview)
-					{
 
-					}
+					browser.Navigate(Application.StartupPath + "\\" + Constants.defaultOutputFile);
 
-					else
-					{
-						browser.Navigate(Application.StartupPath + "\\" + Constants.defaultOutputFile);
-					}
+					//if (args.Preview)
+					//{
+
+					//}
+
+					//else
+					//{
+						
+					//}
 				}
 			}
 
-			else if (latexControl.LatexContainer.Document.ContainsID(args.ID) != -1)
+			if (latexControl.LatexContainer.Document != null)
 			{
-				FileIODescriptor fiod = new FileIODescriptor();
-				fiod.ID = args.ID;
-				fiod.Write = false;
-				fiod.FileName = args.PngFile;
-				fiod.IsImage = true;
+				if (latexControl.LatexContainer.Document.ContainsID(args.ID) != -1 && args.Preview)
+				{
+					FileIODescriptor fiod = new FileIODescriptor();
+					fiod.ID = args.ID;
+					fiod.Write = false;
+					fiod.FileName = args.PngFile;
+					fiod.IsImage = true;
 
-				diskHandler.AddFileToAccessQueue(fiod);
+					diskHandler.AddFileToAccessQueue(fiod);
+				}
 			}
 		}
 

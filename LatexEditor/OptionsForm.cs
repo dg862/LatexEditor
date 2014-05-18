@@ -74,7 +74,10 @@ namespace LatexEditor
             get { return this.previewCodeTb; }
         }
 
-		
+		public TextBox TexifyPathTb
+		{
+			get { return this.texifyPathTb; }
+		}
 
         //public OptionManager OpManager
         //{
@@ -103,17 +106,18 @@ namespace LatexEditor
         public void CheckOptions()
         {
             //Check if we have selected a distribution to use in the options file.
-            if (!string.IsNullOrEmpty(REditorLib.Constants.latexDistribution))
+            if (!string.IsNullOrEmpty(Constants.latexDistribution))
             {
-                this.distroCb.Items.Add(REditorLib.Constants.latexDistribution);
-                this.distroCb.Text = REditorLib.Constants.latexDistribution;
-                this.distPathTb.Text = REditorLib.Constants.distributionPath;
-                this.compilerPathTb.Text = REditorLib.Constants.compilerPath;
-                this.compilerArgsTb.Text = REditorLib.Constants.defaultCompilerArgs;
-                this.imagickPathTb.Text = REditorLib.Constants.imageMagickPath;
-                this.tempFilesTb.Text = REditorLib.Constants.scratchPadPath;
-                this.previewCodeTb.Text = REditorLib.Constants.defaultPreviewCode;
-                this.previewArgsTb.Text = REditorLib.Constants.defaultPreviewArgs;
+                this.distroCb.Items.Add(Constants.latexDistribution);
+                this.distroCb.Text = Constants.latexDistribution;
+                this.distPathTb.Text = Constants.distributionPath;
+				this.texifyPathTb.Text = Constants.texifyPath;
+                this.compilerPathTb.Text = Constants.compilerName;
+                this.compilerArgsTb.Text = Constants.compilerArgs;
+                this.imagickPathTb.Text = Constants.imageMagickPath;
+                this.tempFilesTb.Text = Constants.scratchPadPath;
+                this.previewCodeTb.Text = Constants.previewCode;
+                this.previewArgsTb.Text = Constants.previewArgs;
             }
         }
 
@@ -138,30 +142,68 @@ namespace LatexEditor
 
         private void browseBtn_Click(object sender, EventArgs e)
         {
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Multiselect = false;
+			ofd.Filter = "Executables (*.exe)|*.exe|All files (*.*)|*.*";
 
+			if (ofd.ShowDialog() == DialogResult.OK)
+			{
+				this.distPathTb.Text = ofd.FileName;
+			}
         }
 
         private void compPathBrowseBtn_Click(object sender, EventArgs e)
         {
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Multiselect = false;
+			ofd.Filter = "Executables (*.exe)|*.exe|All files (*.*)|*.*";
 
+			if (ofd.ShowDialog() == DialogResult.OK)
+			{
+				this.compilerPathTb.Text = ofd.FileName;
+			}
         }
 
         private void imagickPathBtn_Click(object sender, EventArgs e)
         {
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Multiselect = false;
+			ofd.Filter = "Executables (*.exe)|*.exe|All files (*.*)|*.*";
 
+			if (ofd.ShowDialog() == DialogResult.OK)
+			{
+				this.imagickPathTb.Text = ofd.FileName;
+			}
         }
 
         private void tempFilesBtn_Click(object sender, EventArgs e)
         {
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Multiselect = false;
+			ofd.Filter = "Executables (*.exe)|*.exe|All files (*.*)|*.*";
 
+			if (ofd.ShowDialog() == DialogResult.OK)
+			{
+				this.tempFilesTb.Text = ofd.FileName;
+			}
         }
+
+		private void texifyPathBrowseBtn_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Multiselect = false;
+			ofd.Filter = "Executables (*.exe)|*.exe|All files (*.*)|*.*";
+
+			if (ofd.ShowDialog() == DialogResult.OK)
+			{
+				this.texifyPathTb.Text = ofd.FileName;
+			}
+		}
 		
 		private void snippetTreeView_Click(object sender, EventArgs e)
 		{
 			//snippetRtb.Text = opManager.SnippetDict[snippetTreeView.SelectedNode.Text];
 		}
-
-        #endregion
 
 		private void addNewNodeBtn_Click(object sender, EventArgs e)
 		{
@@ -171,11 +213,24 @@ namespace LatexEditor
 			}
 
 			snippetRtb.Text = string.Empty;
+			newSnippetTb.Text = string.Empty;
 		}
 
 		private void saveSnipBtn_Click(object sender, EventArgs e)
 		{
-			opManager.SnippetDict[snippetTreeView.SelectedNode.Text] = snippetRtb.Text;
+			snippetTreeView.Nodes.Add(newSnippetTb.Text);
+			opManager.SnippetDict[newSnippetTb.Text] = snippetRtb.Text;
+
+			newSnippetTb.Text = string.Empty;
+
+			//if (snippetTreeView.SelectedNode != null)
+			//{
+			//	opManager.SnippetDict[snippetTreeView.SelectedNode.Text] = snippetRtb.Text;
+			//}
+
+			//else
+			//{
+			//}
 		}
 
 		private void snippetTreeView_DoubleClick(object sender, EventArgs e)
@@ -189,5 +244,7 @@ namespace LatexEditor
 
 			}
 		}
+
+        #endregion
     }
 }

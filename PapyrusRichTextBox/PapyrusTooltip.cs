@@ -17,9 +17,18 @@ namespace PapyrusDictionary
 
 		#endregion
 
+		#region Constructors
+
+		public PapyrusTooltip()
+		{
+			papyrusText = new PapyrusString(string.Empty);
+		}
+
+		#endregion
+
 		#region Properties
 
-        public int SelectedLine
+		public int SelectedLine
         {
             get { return selectedLine; }
             set
@@ -88,65 +97,26 @@ namespace PapyrusDictionary
 
         public void SelectLine(int line)
         {
-
-            //this.Select(0,0);
             string txt = this.Text;
             int start = 0, stop = 0;
-            //int i = 0, j = 0, k = 0;
 
             for (int i = 0; i < line + 1; i++)
             {
-                stop = txt.IndexOf('\n', stop + 1);
-                stop = stop == -1 ? txt.Length : stop;
+				if (stop + 1 < txt.Length)
+				{
+					stop = txt.IndexOf('\n', stop + 1);
+					stop = stop == -1 ? txt.Length : stop;
+				}
             }
 
-            start = txt.LastIndexOf('\n', stop - 1);
+			if (stop - 1 > -1)
+			{
+				start = txt.LastIndexOf('\n', stop - 1);
 
-            start = start == -1 ? 0 : start;
+				start = start == -1 ? 0 : start;
+			}
 
-            this.Select(start, stop - start);
-
-
-
-
-            //line++;
-
-            //while (j < txt.Length)
-            //{
-            //    if (i == line - 1)
-            //    {
-            //        k = j;
-            //    }
-
-            //    if (i == line)
-            //    {
-            //        break;
-            //    }
-
-            //    if (txt[j] == '\n')
-            //    {
-            //        i++;
-            //    }
-
-            //    j++;
-            //}
-
-            //this.Select(k, j - k);
-
-
-
-
-            //while (i < selectedLine + 1 && j < txt.Length)
-            //{
-            //    if (txt[j] == '\n')
-            //    {
-            //        k = j;
-            //        i++;
-            //    }
-            //    j++;
-            //}
-
-            //this.Select(k, j - k);            
+            this.Select(start, stop - start);          
         }
 
 		public void Redraw()
@@ -157,6 +127,8 @@ namespace PapyrusDictionary
 		public void PapyrusVScroll(int lines)
 		{
 			base.Update();
+
+
 
 			base.Text = papyrusText[currentLine + lines];
 

@@ -108,7 +108,6 @@
 			this.sourceTextBox.CommandList = null;
 			this.sourceTextBox.CurrentID = "0";
 			this.sourceTextBox.CurrentLine = 0;
-			this.sourceTextBox.CurrentTranslation = "";
 			this.sourceTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.sourceTextBox.HasTooltip = true;
 			this.sourceTextBox.Location = new System.Drawing.Point(3, 3);
@@ -146,6 +145,7 @@
 			this.tabControl1.SelectedIndex = 0;
 			this.tabControl1.Size = new System.Drawing.Size(431, 396);
 			this.tabControl1.TabIndex = 1;
+			this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
 			// 
 			// tabPage1
 			// 

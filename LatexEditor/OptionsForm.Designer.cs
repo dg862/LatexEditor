@@ -54,11 +54,14 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.distroCb = new System.Windows.Forms.ComboBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.snippetTreeView = new System.Windows.Forms.TreeView();
-			this.snippetRtb = new System.Windows.Forms.RichTextBox();
-			this.addNewNodeBtn = new System.Windows.Forms.Button();
-			this.newSnippetTb = new System.Windows.Forms.TextBox();
 			this.saveSnipBtn = new System.Windows.Forms.Button();
+			this.newSnippetTb = new System.Windows.Forms.TextBox();
+			this.addNewNodeBtn = new System.Windows.Forms.Button();
+			this.snippetRtb = new System.Windows.Forms.RichTextBox();
+			this.snippetTreeView = new System.Windows.Forms.TreeView();
+			this.label9 = new System.Windows.Forms.Label();
+			this.texifyPathTb = new System.Windows.Forms.TextBox();
+			this.texifyPathBrowseBtn = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -66,7 +69,8 @@
 			// 
 			// cancelBtn
 			// 
-			this.cancelBtn.Location = new System.Drawing.Point(610, 535);
+			this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.cancelBtn.Location = new System.Drawing.Point(610, 576);
 			this.cancelBtn.Name = "cancelBtn";
 			this.cancelBtn.Size = new System.Drawing.Size(75, 23);
 			this.cancelBtn.TabIndex = 0;
@@ -76,7 +80,8 @@
 			// 
 			// okBtn
 			// 
-			this.okBtn.Location = new System.Drawing.Point(529, 535);
+			this.okBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.okBtn.Location = new System.Drawing.Point(529, 576);
 			this.okBtn.Name = "okBtn";
 			this.okBtn.Size = new System.Drawing.Size(75, 23);
 			this.okBtn.TabIndex = 1;
@@ -104,11 +109,14 @@
 			this.tabControl1.Location = new System.Drawing.Point(12, 12);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(673, 517);
+			this.tabControl1.Size = new System.Drawing.Size(673, 558);
 			this.tabControl1.TabIndex = 3;
 			// 
 			// tabPage1
 			// 
+			this.tabPage1.Controls.Add(this.texifyPathBrowseBtn);
+			this.tabPage1.Controls.Add(this.texifyPathTb);
+			this.tabPage1.Controls.Add(this.label9);
 			this.tabPage1.Controls.Add(this.previewCodeTb);
 			this.tabPage1.Controls.Add(this.label8);
 			this.tabPage1.Controls.Add(this.previewArgsTb);
@@ -133,14 +141,14 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(665, 491);
+			this.tabPage1.Size = new System.Drawing.Size(665, 532);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Paths";
 			this.tabPage1.UseVisualStyleBackColor = true;
 			// 
 			// previewCodeTb
 			// 
-			this.previewCodeTb.Location = new System.Drawing.Point(134, 286);
+			this.previewCodeTb.Location = new System.Drawing.Point(134, 311);
 			this.previewCodeTb.Multiline = true;
 			this.previewCodeTb.Name = "previewCodeTb";
 			this.previewCodeTb.Size = new System.Drawing.Size(518, 199);
@@ -149,7 +157,7 @@
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(6, 289);
+			this.label8.Location = new System.Drawing.Point(6, 314);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(75, 13);
 			this.label8.TabIndex = 21;
@@ -157,7 +165,7 @@
 			// 
 			// previewArgsTb
 			// 
-			this.previewArgsTb.Location = new System.Drawing.Point(134, 247);
+			this.previewArgsTb.Location = new System.Drawing.Point(134, 272);
 			this.previewArgsTb.Name = "previewArgsTb";
 			this.previewArgsTb.Size = new System.Drawing.Size(518, 20);
 			this.previewArgsTb.TabIndex = 20;
@@ -165,7 +173,7 @@
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(6, 250);
+			this.label7.Location = new System.Drawing.Point(6, 275);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(100, 13);
 			this.label7.TabIndex = 19;
@@ -173,7 +181,7 @@
 			// 
 			// tempFilesBtn
 			// 
-			this.tempFilesBtn.Location = new System.Drawing.Point(577, 204);
+			this.tempFilesBtn.Location = new System.Drawing.Point(577, 229);
 			this.tempFilesBtn.Name = "tempFilesBtn";
 			this.tempFilesBtn.Size = new System.Drawing.Size(75, 23);
 			this.tempFilesBtn.TabIndex = 18;
@@ -183,7 +191,7 @@
 			// 
 			// tempFilesTb
 			// 
-			this.tempFilesTb.Location = new System.Drawing.Point(134, 206);
+			this.tempFilesTb.Location = new System.Drawing.Point(134, 231);
 			this.tempFilesTb.Name = "tempFilesTb";
 			this.tempFilesTb.Size = new System.Drawing.Size(437, 20);
 			this.tempFilesTb.TabIndex = 17;
@@ -191,7 +199,7 @@
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(6, 209);
+			this.label6.Location = new System.Drawing.Point(6, 234);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(81, 13);
 			this.label6.TabIndex = 16;
@@ -199,7 +207,7 @@
 			// 
 			// imagickPathBtn
 			// 
-			this.imagickPathBtn.Location = new System.Drawing.Point(577, 158);
+			this.imagickPathBtn.Location = new System.Drawing.Point(577, 190);
 			this.imagickPathBtn.Name = "imagickPathBtn";
 			this.imagickPathBtn.Size = new System.Drawing.Size(75, 23);
 			this.imagickPathBtn.TabIndex = 15;
@@ -209,7 +217,7 @@
 			// 
 			// imagickPathTb
 			// 
-			this.imagickPathTb.Location = new System.Drawing.Point(134, 160);
+			this.imagickPathTb.Location = new System.Drawing.Point(134, 192);
 			this.imagickPathTb.Name = "imagickPathTb";
 			this.imagickPathTb.Size = new System.Drawing.Size(437, 20);
 			this.imagickPathTb.TabIndex = 14;
@@ -217,7 +225,7 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(6, 163);
+			this.label5.Location = new System.Drawing.Point(6, 195);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(98, 13);
 			this.label5.TabIndex = 13;
@@ -225,7 +233,7 @@
 			// 
 			// compilerArgsTb
 			// 
-			this.compilerArgsTb.Location = new System.Drawing.Point(134, 120);
+			this.compilerArgsTb.Location = new System.Drawing.Point(134, 152);
 			this.compilerArgsTb.Name = "compilerArgsTb";
 			this.compilerArgsTb.Size = new System.Drawing.Size(518, 20);
 			this.compilerArgsTb.TabIndex = 12;
@@ -233,7 +241,7 @@
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(6, 123);
+			this.label4.Location = new System.Drawing.Point(6, 155);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(102, 13);
 			this.label4.TabIndex = 11;
@@ -241,7 +249,7 @@
 			// 
 			// compPathBrowseBtn
 			// 
-			this.compPathBrowseBtn.Location = new System.Drawing.Point(577, 81);
+			this.compPathBrowseBtn.Location = new System.Drawing.Point(577, 113);
 			this.compPathBrowseBtn.Name = "compPathBrowseBtn";
 			this.compPathBrowseBtn.Size = new System.Drawing.Size(75, 23);
 			this.compPathBrowseBtn.TabIndex = 10;
@@ -251,7 +259,7 @@
 			// 
 			// compilerPathTb
 			// 
-			this.compilerPathTb.Location = new System.Drawing.Point(134, 83);
+			this.compilerPathTb.Location = new System.Drawing.Point(134, 115);
 			this.compilerPathTb.Name = "compilerPathTb";
 			this.compilerPathTb.Size = new System.Drawing.Size(437, 20);
 			this.compilerPathTb.TabIndex = 9;
@@ -259,7 +267,7 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(6, 86);
+			this.label3.Location = new System.Drawing.Point(6, 118);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(74, 13);
 			this.label3.TabIndex = 8;
@@ -323,22 +331,22 @@
 			this.tabPage2.Text = "Snippets";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
-			// snippetTreeView
+			// saveSnipBtn
 			// 
-			this.snippetTreeView.Location = new System.Drawing.Point(6, 6);
-			this.snippetTreeView.Name = "snippetTreeView";
-			this.snippetTreeView.Size = new System.Drawing.Size(121, 482);
-			this.snippetTreeView.TabIndex = 0;
-			this.snippetTreeView.Click += new System.EventHandler(this.snippetTreeView_Click);
-			this.snippetTreeView.DoubleClick += new System.EventHandler(this.snippetTreeView_DoubleClick);
+			this.saveSnipBtn.Location = new System.Drawing.Point(343, 463);
+			this.saveSnipBtn.Name = "saveSnipBtn";
+			this.saveSnipBtn.Size = new System.Drawing.Size(87, 23);
+			this.saveSnipBtn.TabIndex = 4;
+			this.saveSnipBtn.Text = "Save changes";
+			this.saveSnipBtn.UseVisualStyleBackColor = true;
+			this.saveSnipBtn.Click += new System.EventHandler(this.saveSnipBtn_Click);
 			// 
-			// snippetRtb
+			// newSnippetTb
 			// 
-			this.snippetRtb.Location = new System.Drawing.Point(134, 7);
-			this.snippetRtb.Name = "snippetRtb";
-			this.snippetRtb.Size = new System.Drawing.Size(525, 452);
-			this.snippetRtb.TabIndex = 1;
-			this.snippetRtb.Text = "";
+			this.newSnippetTb.Location = new System.Drawing.Point(134, 465);
+			this.newSnippetTb.Name = "newSnippetTb";
+			this.newSnippetTb.Size = new System.Drawing.Size(100, 20);
+			this.newSnippetTb.TabIndex = 3;
 			// 
 			// addNewNodeBtn
 			// 
@@ -350,28 +358,54 @@
 			this.addNewNodeBtn.UseVisualStyleBackColor = true;
 			this.addNewNodeBtn.Click += new System.EventHandler(this.addNewNodeBtn_Click);
 			// 
-			// newSnippetTb
+			// snippetRtb
 			// 
-			this.newSnippetTb.Location = new System.Drawing.Point(134, 465);
-			this.newSnippetTb.Name = "newSnippetTb";
-			this.newSnippetTb.Size = new System.Drawing.Size(100, 20);
-			this.newSnippetTb.TabIndex = 3;
+			this.snippetRtb.Location = new System.Drawing.Point(134, 7);
+			this.snippetRtb.Name = "snippetRtb";
+			this.snippetRtb.Size = new System.Drawing.Size(525, 452);
+			this.snippetRtb.TabIndex = 1;
+			this.snippetRtb.Text = "";
 			// 
-			// saveSnipBtn
+			// snippetTreeView
 			// 
-			this.saveSnipBtn.Location = new System.Drawing.Point(343, 463);
-			this.saveSnipBtn.Name = "saveSnipBtn";
-			this.saveSnipBtn.Size = new System.Drawing.Size(87, 23);
-			this.saveSnipBtn.TabIndex = 4;
-			this.saveSnipBtn.Text = "Save changes";
-			this.saveSnipBtn.UseVisualStyleBackColor = true;
-			this.saveSnipBtn.Click += new System.EventHandler(this.saveSnipBtn_Click);
+			this.snippetTreeView.Location = new System.Drawing.Point(6, 6);
+			this.snippetTreeView.Name = "snippetTreeView";
+			this.snippetTreeView.Size = new System.Drawing.Size(121, 482);
+			this.snippetTreeView.TabIndex = 0;
+			this.snippetTreeView.Click += new System.EventHandler(this.snippetTreeView_Click);
+			this.snippetTreeView.DoubleClick += new System.EventHandler(this.snippetTreeView_DoubleClick);
+			// 
+			// label9
+			// 
+			this.label9.AutoSize = true;
+			this.label9.Location = new System.Drawing.Point(6, 81);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(62, 13);
+			this.label9.TabIndex = 23;
+			this.label9.Text = "Texify path:";
+			// 
+			// texifyPathTb
+			// 
+			this.texifyPathTb.Location = new System.Drawing.Point(134, 78);
+			this.texifyPathTb.Name = "texifyPathTb";
+			this.texifyPathTb.Size = new System.Drawing.Size(437, 20);
+			this.texifyPathTb.TabIndex = 24;
+			// 
+			// texifyPathBrowseBtn
+			// 
+			this.texifyPathBrowseBtn.Location = new System.Drawing.Point(577, 76);
+			this.texifyPathBrowseBtn.Name = "texifyPathBrowseBtn";
+			this.texifyPathBrowseBtn.Size = new System.Drawing.Size(75, 23);
+			this.texifyPathBrowseBtn.TabIndex = 25;
+			this.texifyPathBrowseBtn.Text = "Browse...";
+			this.texifyPathBrowseBtn.UseVisualStyleBackColor = true;
+			this.texifyPathBrowseBtn.Click += new System.EventHandler(this.texifyPathBrowseBtn_Click);
 			// 
 			// OptionsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(697, 570);
+			this.ClientSize = new System.Drawing.Size(697, 611);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.okBtn);
 			this.Controls.Add(this.cancelBtn);
@@ -419,5 +453,8 @@
 		private System.Windows.Forms.Button addNewNodeBtn;
 		private System.Windows.Forms.TextBox newSnippetTb;
 		private System.Windows.Forms.Button saveSnipBtn;
+		private System.Windows.Forms.Button texifyPathBrowseBtn;
+		private System.Windows.Forms.TextBox texifyPathTb;
+		private System.Windows.Forms.Label label9;
     }
 }

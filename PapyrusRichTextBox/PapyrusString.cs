@@ -13,10 +13,16 @@ namespace PapyrusDictionary
 		private int				linesPerPage = 100;
 		private List<int>		lineIndices;
 		private bool			spacing;
+		private int				maxLineIndex = 0;
 
 		#endregion
 
 		#region Properties
+
+		public int MaxLineIndex
+		{
+			get { return maxLineIndex; }
+		}
 
 		public string Str
 		{
@@ -72,6 +78,13 @@ namespace PapyrusDictionary
 		#endregion
 
 		#region Methods
+
+		public int CalculateMaxLineIndex()
+		{
+			maxLineIndex = numberOfLines - linesPerPage;
+
+			return maxLineIndex;
+		}
 
         public int Search(string what)
         {
@@ -139,7 +152,6 @@ namespace PapyrusDictionary
 
 		public string this[int index]
 		{
-			//	get { return str.Substring( lineIndices[index], lineIndices[index + linesPerPage] ); }
 			get
 			{
 				if ( !string.IsNullOrEmpty( str ) )
@@ -162,6 +174,13 @@ namespace PapyrusDictionary
 
 				return string.Empty;
 			}
+		}
+
+		public static implicit operator PapyrusString(string s)
+		{
+			PapyrusString newString = new PapyrusString(s);
+
+			return newString;
 		}
 
 		#endregion

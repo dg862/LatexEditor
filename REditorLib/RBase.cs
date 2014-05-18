@@ -33,10 +33,17 @@ namespace REditorLib
 		private Size								clientSize;
 		private bool								previewOutOfDate = true;
 		private bool								isPreambleTag = false;
+		private bool								isResized = false;
 
 		#endregion
 
 		#region Properties
+
+		public bool IsResized
+		{
+			get { return isResized; }
+			set { isResized = value; }
+		}
 
 		public bool IsPreambleTag
 		{
@@ -257,7 +264,7 @@ namespace REditorLib
 			return -1;
 		}
 
-		public void SetImage(int index, Image img)
+		public void SetImage(int index, Image img, bool resized)
 		{
 			LinkedList<RBase>.Enumerator en = container.Nodes.GetEnumerator();
 			en.MoveNext();
@@ -267,7 +274,8 @@ namespace REditorLib
 				en.MoveNext();
 			}
 
-			en.Current.Visual = img;			
+			en.Current.Visual = img;
+			en.Current.isResized = resized;
 		}
 
 

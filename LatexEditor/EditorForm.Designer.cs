@@ -28,9 +28,10 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			REditorLib.RBase rBase2 = new REditorLib.RBase();
+			REditorLib.RBase rBase1 = new REditorLib.RBase();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditorForm));
 			this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+			this.rControl = new REditorLib.RControl();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -141,7 +142,6 @@
 			this.searchCombo = new System.Windows.Forms.ToolStripComboBox();
 			this.searchBtn = new System.Windows.Forms.ToolStripButton();
 			this.searchBackBtn = new System.Windows.Forms.ToolStripButton();
-			this.rControl = new REditorLib.RControl();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.SuspendLayout();
@@ -167,6 +167,29 @@
 			// 
 			this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip1);
 			this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
+			// 
+			// rControl
+			// 
+			this.rControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.rControl.DiskHandler = null;
+			this.rControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.rControl.LatexCompiler = null;
+			rBase1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(43)))), ((int)(((byte)(54)))));
+			rBase1.ClientSize = new System.Drawing.Size(0, 0);
+			rBase1.DefaultBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(43)))), ((int)(((byte)(54)))));
+			rBase1.DefaultForegroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(148)))), ((int)(((byte)(150)))));
+			rBase1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(148)))), ((int)(((byte)(150)))));
+			rBase1.IsPreambleTag = false;
+			rBase1.ParentEditor = null;
+			rBase1.PositionInParent = ((System.Drawing.PointF)(resources.GetObject("rBase1.PositionInParent")));
+			rBase1.PreviewOutOfDate = true;
+			rBase1.ResizedVisual = null;
+			rBase1.Visual = null;
+			this.rControl.LatexContainer = rBase1;
+			this.rControl.Location = new System.Drawing.Point(0, 0);
+			this.rControl.Name = "rControl";
+			this.rControl.Size = new System.Drawing.Size(1169, 721);
+			this.rControl.TabIndex = 0;
 			// 
 			// menuStrip1
 			// 
@@ -905,7 +928,7 @@
             this.searchBackBtn});
 			this.toolStrip1.Location = new System.Drawing.Point(3, 24);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(761, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(730, 25);
 			this.toolStrip1.TabIndex = 0;
 			// 
 			// compileBtn
@@ -1083,29 +1106,6 @@
 			this.searchBackBtn.Size = new System.Drawing.Size(24, 22);
 			this.searchBackBtn.Text = "<-";
 			this.searchBackBtn.Click += new System.EventHandler(this.searchBackBtn_Click);
-			// 
-			// rControl
-			// 
-			this.rControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.rControl.DiskHandler = null;
-			this.rControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.rControl.LatexCompiler = null;
-			rBase2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(43)))), ((int)(((byte)(54)))));
-			rBase2.ClientSize = new System.Drawing.Size(0, 0);
-			rBase2.DefaultBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(43)))), ((int)(((byte)(54)))));
-			rBase2.DefaultForegroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(148)))), ((int)(((byte)(150)))));
-			rBase2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(148)))), ((int)(((byte)(150)))));
-			rBase2.IsPreambleTag = false;
-			rBase2.ParentEditor = null;
-			rBase2.PositionInParent = ((System.Drawing.PointF)(resources.GetObject("rBase2.PositionInParent")));
-			rBase2.PreviewOutOfDate = true;
-			rBase2.ResizedVisual = null;
-			rBase2.Visual = null;
-			this.rControl.LatexContainer = rBase2;
-			this.rControl.Location = new System.Drawing.Point(0, 0);
-			this.rControl.Name = "rControl";
-			this.rControl.Size = new System.Drawing.Size(1169, 721);
-			this.rControl.TabIndex = 0;
 			// 
 			// EditorForm
 			// 

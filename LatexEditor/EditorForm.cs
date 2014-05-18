@@ -412,6 +412,5 @@ namespace LatexEditor
 
 		#endregion		
 
-
 	}
 }

@@ -193,28 +193,42 @@ namespace REditorLib
 
 		public void DrawPreview()
 		{
-			Graphics g = this.previewBox.CreateGraphics();
+			Bitmap bmp = new Bitmap(this.previewBox.Width, this.previewBox.Height);
+			Graphics g = Graphics.FromImage(bmp);
 			float dx = g.DpiX;
 			float dy = g.DpiY;
 			Pen p = new Pen(Color.Black, 0.4f);
+
+			//Draw an A4 sized rectanlge.
 			RectangleF rect = new RectangleF(0, 0, 8.27f * dx, 11.69f * dy);
 			int sumHeight = 0;
 
 			g.DrawRectangle(p, rect.X, rect.Y, rect.Width, rect.Height);
 
-			foreach (var item in theContainer.Document.Children)
+			if (theContainer.Document != null)
 			{
-				if (!item.IsPreambleTag && item.Visual != null)
+				if (theContainer.Document.Children != null)
 				{
-					Size s = new Size((int)(item.Visual.Size.Width * dx / (float)Constants.density), (int)(item.Visual.Size.Height * dy / (float)Constants.density));
+					foreach (var item in theContainer.Document.Children)
+					{
+						if (!item.IsPreambleTag && item.Visual != null)
+						{
+							if (!item.IsResized)
+							{
+								Size s = new Size((int)(item.Visual.Size.Width * dx / (float)Constants.density), (int)(item.Visual.Size.Height * dy / (float)Constants.density));
 
-					item.ResizedVisual = ResizeImage(item.Visual, s);
+								item.ResizedVisual = ResizeImage(item.Visual, s);
+								item.IsResized = true;
+							}
 
-					g.DrawImage(item.ResizedVisual, new Point(0, sumHeight));
-					sumHeight += item.ResizedVisual.Height + 20;
-					//previewBox.Image = item.ResizedVisual;
+							g.DrawImage(item.ResizedVisual, new Point(0, sumHeight));
+							sumHeight += item.ResizedVisual.Height + 20;
+						}
+					}
 				}
 			}
+
+			this.previewBox.Image = bmp;
 
 			g.Dispose();
 		}
@@ -303,6 +317,14 @@ namespace REditorLib
 		private void previewBox_Click(object sender, EventArgs e)
 		{
 
+		}
+
+		private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (tabControl1.SelectedIndex == 1)
+			{
+				this.DrawPreview();
+			}
 		}
 	}
 }
